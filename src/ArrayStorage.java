@@ -14,6 +14,10 @@ public class ArrayStorage {
         return null;
     }
 
+    /**
+     * тест
+     * @param uuid
+     */
     void delete(String uuid) {
     }
 
