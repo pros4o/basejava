@@ -1,4 +1,5 @@
 //import java.lang.reflect.Array;
+
 import java.util.Arrays;
 
 /**
@@ -23,6 +24,12 @@ public class ArrayStorage {
      * @param r - элемент для сохранения
      */
     void save(Resume r) {
+        for (int i = 0; i < elements; i++) {
+            if (storage[i].uuid.equals(r.uuid)) {
+                System.out.println("Элемент уже существует");
+                return;
+            }
+        }
         storage[elements] = r;
         elements++;
     }
