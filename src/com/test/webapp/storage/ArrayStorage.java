@@ -1,6 +1,5 @@
 package com.test.webapp.storage;
-//!! не забыть отформотировать его
-//
+
 import java.util.Arrays;
 import com.test.webapp.model.Resume;
 
@@ -8,9 +7,9 @@ import com.test.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private final static int MAX_SIGE = 2;//не забыть вернуть на 10.000//Максимальное количество резюме
+    private final static int MAX_SIGE = 10000;//не забыть вернуть на 10.000//Максимальное количество резюме
     private Resume[] storage = new Resume[MAX_SIGE];
-    private int elements = 0; //количество резюме в хранилке
+    private int elements = 0;
 
     /**
      * Обнуление массива
@@ -22,7 +21,6 @@ public class ArrayStorage {
 
     /**
      * Метод для сохранения резюме
-     *
      * @param r - элемент для сохранения
      */
     public void save(Resume r) {
@@ -30,14 +28,11 @@ public class ArrayStorage {
             System.out.println("Attention. Overflow");
             return;
         }
-        for (int i = 0; i < elements; i++) {
-            if (storage[i].getUuid().equals(r.getUuid())) {
-                System.out.println("Элемент уже существует");
-                return;
-            }
+
+        if(checkResume(r)) {
+            storage[elements] = r;
+            elements++;
         }
-        storage[elements] = r;
-        elements++;
     }
 
     /**
@@ -46,26 +41,21 @@ public class ArrayStorage {
      */
     public Resume get(String uuid) {
         if (!checkResume(uuid)) {
-            System.out.println("Resume ... " + uuid + " not found");
             return null;
         } else {
             return storage[getIndex(uuid)];
         }
     }
 
-
     /**
      * Удаляет элемент из массива по его uuid
-     *
      * @param uuid - метка резюме
      */
     public void delete(String uuid) {
-        for (int i = 0; i < elements; i++) {
-            if (storage[i].getUuid().equals(uuid)) {
-                storage[i] = storage[elements - 1];
-                storage[elements - 1] = null;
-                elements--;
-            }
+        if (checkResume(uuid)) {
+            storage[getIndex(uuid)] = storage[elements - 1];
+            storage[elements - 1] = null;
+            elements--;
         }
     }
 
@@ -86,30 +76,31 @@ public class ArrayStorage {
 
     /**
      * Проверка на наличие резюме
-     * @param r
-     * @return
+     * @param r - резюме для проверки
      */
-    private boolean checkResume(Resume r) {
-        boolean flag = false;
-        if (getIndex(r.getUuid()) >= 0) flag = true;
-        return flag;
+     private boolean checkResume(Resume r) {
+        if (getIndex(r.getUuid()) >= 0) {
+            System.out.println("Resume ... " + r.getUuid() + " already added");
+            return false;
+        }
+        return true;
     }
 
     /**
      * Проверка на наличие резюме
-     * @param uuid
-     * @return
+     * @param uuid инд. резюме
+     * @return возвращает true, если резюме есть в хранилке
      */
     private boolean checkResume(String uuid) {
-        boolean flag = false;
-        if (getIndex(uuid) >= 0) flag = true;
-        return flag;
+        if (getIndex(uuid) >= 0) return true;
+        System.out.println("Resume ... " + uuid + " not found");
+        return false;
     }
 
     /**
      * В поисках индекса.
-     * @param uuid
-     * @return
+     * @param uuid инд. резюме
+     * @return возвращает индекс, если нету, то -1
      */
     private int getIndex(String uuid) {
         for (int i = 0; i < elements; i++) {
