@@ -1,6 +1,7 @@
 package com.test.webapp.storage;
 
 import java.util.Arrays;
+
 import com.test.webapp.model.Resume;
 
 /**
@@ -21,15 +22,16 @@ public class ArrayStorage {
 
     /**
      * Метод для сохранения резюме
+     *
      * @param r - элемент для сохранения
      */
     public void save(Resume r) {
-        if((elements + 1) > MAX_SIGE) {
+        if ((elements + 1) > MAX_SIGE) {
             System.out.println("Attention. Overflow");
             return;
         }
 
-        if(checkResume(r)) {
+        if (checkResume(r)) {
             storage[elements] = r;
             elements++;
         }
@@ -49,6 +51,7 @@ public class ArrayStorage {
 
     /**
      * Удаляет элемент из массива по его uuid
+     *
      * @param uuid - метка резюме
      */
     public void delete(String uuid) {
@@ -61,6 +64,7 @@ public class ArrayStorage {
 
     /**
      * Вывод весь массив
+     *
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
@@ -76,9 +80,10 @@ public class ArrayStorage {
 
     /**
      * Проверка на наличие резюме
+     *
      * @param r - резюме для проверки
      */
-     private boolean checkResume(Resume r) {
+    private boolean checkResume(Resume r) {
         if (getIndex(r.getUuid()) >= 0) {
             System.out.println("Resume ... " + r.getUuid() + " already added");
             return false;
@@ -88,6 +93,7 @@ public class ArrayStorage {
 
     /**
      * Проверка на наличие резюме
+     *
      * @param uuid инд. резюме
      * @return возвращает true, если резюме есть в хранилке
      */
@@ -99,6 +105,7 @@ public class ArrayStorage {
 
     /**
      * В поисках индекса.
+     *
      * @param uuid инд. резюме
      * @return возвращает индекс, если нету, то -1
      */
