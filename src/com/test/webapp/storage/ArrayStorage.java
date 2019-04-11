@@ -8,7 +8,7 @@ import com.test.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private final static int MAX_SIGE = 10000;//не забыть вернуть на 10.000//Максимальное количество резюме
+    private final static int MAX_SIGE = 3;//не забыть вернуть на 10.000//Максимальное количество резюме
     private Resume[] storage = new Resume[MAX_SIGE];
     private int elements = 0;
 
@@ -31,10 +31,12 @@ public class ArrayStorage {
             return;
         }
 
-        if (checkResume(r)) {
-            storage[elements] = r;
-            elements++;
+        if (!checkResume(r)) {
+            System.out.println("Resume ... " + r.getUuid() + " already added");
+            return;
         }
+        storage[elements] = r;
+        elements++;
     }
 
     /**
@@ -71,6 +73,7 @@ public class ArrayStorage {
         return Arrays.copyOf(storage, elements);
     }
 
+
     /**
      * @return number of resume
      */
@@ -84,11 +87,7 @@ public class ArrayStorage {
      * @param r - резюме для проверки
      */
     private boolean checkResume(Resume r) {
-        if (getIndex(r.getUuid()) >= 0) {
-            System.out.println("Resume ... " + r.getUuid() + " already added");
-            return false;
-        }
-        return true;
+        return !(getIndex(r.getUuid()) >= 0);
     }
 
     /**
@@ -116,5 +115,18 @@ public class ArrayStorage {
             }
         }
         return -1;
+    }
+
+    /**
+     * Потерянный update
+     *
+     * @param resume - резюме для проверки
+     */
+    public void update(Resume resume) {
+        if (checkResume(resume)) {
+            System.out.println("Error");
+            return;
+        }
+        storage[getIndex(resume.getUuid())] = resume;
     }
 }
