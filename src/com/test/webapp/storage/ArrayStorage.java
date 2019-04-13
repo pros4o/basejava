@@ -8,35 +8,35 @@ import com.test.webapp.model.Resume;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private final static int MAX_SIGE = 3;//не забыть вернуть на 10.000//Максимальное количество резюме
+    private final static int MAX_SIGE = 10_000;
     private Resume[] storage = new Resume[MAX_SIGE];
-    private int elements = 0;
+    private int carriage = 0;
 
     /**
      * Обнуление массива
      */
     public void clear() {
-        Arrays.fill(storage, 0, elements, null);
-        elements = 0;
+        Arrays.fill(storage, 0, carriage, null);
+        carriage = 0;
     }
 
     /**
      * Метод для сохранения резюме
      *
-     * @param r - элемент для сохранения
+     * @param resume - элемент для сохранения
      */
-    public void save(Resume r) {
-        if ((elements + 1) > MAX_SIGE) {
+    public void save(Resume resume) {
+        if ((carriage + 1) > MAX_SIGE) {
             System.out.println("Attention. Overflow");
             return;
         }
 
-        if (!checkResume(r)) {
-            System.out.println("Resume ... " + r.getUuid() + " already added");
+        if (!checkResume(resume)) {
+            System.out.println("Resume ... " + resume.getUuid() + " already added");
             return;
         }
-        storage[elements] = r;
-        elements++;
+        storage[carriage] = resume;
+        carriage++;
     }
 
     /**
@@ -58,9 +58,9 @@ public class ArrayStorage {
      */
     public void delete(String uuid) {
         if (checkResume(uuid)) {
-            storage[getIndex(uuid)] = storage[elements - 1];
-            storage[elements - 1] = null;
-            elements--;
+            storage[getIndex(uuid)] = storage[carriage - 1];
+            storage[carriage - 1] = null;
+            carriage--;
         }
     }
 
@@ -70,7 +70,7 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     public Resume[] getAll() {
-        return Arrays.copyOf(storage, elements);
+        return Arrays.copyOf(storage, carriage);
     }
 
 
@@ -78,16 +78,16 @@ public class ArrayStorage {
      * @return number of resume
      */
     public int size() {
-        return elements;
+        return carriage;
     }
 
     /**
      * Проверка на наличие резюме
      *
-     * @param r - резюме для проверки
+     * @param resume - резюме для проверки
      */
-    private boolean checkResume(Resume r) {
-        return !(getIndex(r.getUuid()) >= 0);
+    private boolean checkResume(Resume resume) {
+        return !(getIndex(resume.getUuid()) >= 0);
     }
 
     /**
@@ -109,7 +109,7 @@ public class ArrayStorage {
      * @return возвращает индекс, если нету, то -1
      */
     private int getIndex(String uuid) {
-        for (int i = 0; i < elements; i++) {
+        for (int i = 0; i < carriage; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
             }
