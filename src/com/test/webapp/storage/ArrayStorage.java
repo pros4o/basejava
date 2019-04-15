@@ -35,17 +35,20 @@ public class ArrayStorage {
 
 
     public Resume get(String uuid) {
-        if (getIndex(uuid) == -1) {
+        int index = getIndex(uuid);
+        if (index == -1) {
+            System.out.println("Resume ..." + uuid + " not found");
             return null;
         } else {
-            return storage[getIndex(uuid)];
+            return storage[index];
         }
     }
 
 
     public void delete(String uuid) {
-        if (getIndex(uuid) >= 0) {
-            storage[getIndex(uuid)] = storage[carriage - 1];
+        int index = getIndex(uuid);
+        if (index >= 0) {
+            storage[index] = storage[carriage - 1];
             storage[carriage - 1] = null;
             carriage--;
         } else {
@@ -59,11 +62,12 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (getIndex(resume.getUuid()) == -1) {
+        int index = getIndex(resume.getUuid());
+        if (index == -1) {
             System.out.println("Error");
             return;
         }
-        storage[getIndex(resume.getUuid())] = resume;
+        storage[index] = resume;
     }
 
     public int size() {
@@ -71,14 +75,11 @@ public class ArrayStorage {
     }
 
     private int getIndex(String uuid) {
-        int temp = -1;
         for (int i = 0; i < carriage; i++) {
             if (storage[i].getUuid().equals(uuid)) {
-                temp = i;
-                break;
+                return i;
             }
         }
-
-        return temp;
+        return -1;
     }
 }
