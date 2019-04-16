@@ -7,11 +7,7 @@ import com.test.webapp.model.Resume;
 /**
  * Array based storage for Resumes
  */
-public class ArrayStorage {
-    private final static int MAX_SIGE = 10_000;
-    private Resume[] storage = new Resume[MAX_SIGE];
-    private int carriage = 0;
-
+public class ArrayStorage extends AbstractArrayStorage{
 
     public void clear() {
         Arrays.fill(storage, 0, carriage, null);
@@ -33,18 +29,6 @@ public class ArrayStorage {
         carriage++;
     }
 
-
-    public Resume get(String uuid) {
-        int index = getIndex(uuid);
-        if (index == -1) {
-            System.out.println("Resume ..." + uuid + " not found");
-            return null;
-        } else {
-            return storage[index];
-        }
-    }
-
-
     public void delete(String uuid) {
         int index = getIndex(uuid);
         if (index >= 0) {
@@ -56,9 +40,8 @@ public class ArrayStorage {
         }
     }
 
-
     public Resume[] getAll() {
-        return Arrays.copyOf(storage, carriage);
+        return Arrays.copyOfRange(storage, 0, carriage);
     }
 
     public void update(Resume resume) {
@@ -70,11 +53,7 @@ public class ArrayStorage {
         storage[index] = resume;
     }
 
-    public int size() {
-        return carriage;
-    }
-
-    private int getIndex(String uuid) {
+    protected int getIndex(String uuid) {
         for (int i = 0; i < carriage; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
