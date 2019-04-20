@@ -20,8 +20,6 @@ public class ArrayStorage extends AbstractArrayStorage {
     @Override
     protected void deleteResume(int index) {
         storage[index] = storage[carriage - 1];
-        storage[carriage - 1] = null;
-        carriage--;
     }
 
     @Override

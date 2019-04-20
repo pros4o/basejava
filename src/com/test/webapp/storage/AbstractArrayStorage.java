@@ -5,7 +5,7 @@ import com.test.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected final static int MAX_SIGE = 10_000;
+    protected final static int MAX_SIGE = 3;//10_000;
 
     protected Resume[] storage = new Resume[MAX_SIGE];
     protected int carriage = 0;
@@ -59,6 +59,8 @@ public abstract class AbstractArrayStorage implements Storage {
         int index = getIndex(uuid);
         if (index >= 0) {
             deleteResume(index);
+            storage[carriage - 1] = null;
+            carriage--;
         } else {
             System.out.println("Resume ... " + uuid + " not found");
         }
