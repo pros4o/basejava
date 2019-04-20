@@ -4,7 +4,7 @@ import com.test.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public class SortedArrayStorage extends AbstractArrayStorage{
+public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected int getIndex(String uuid) {
@@ -22,7 +22,7 @@ public class SortedArrayStorage extends AbstractArrayStorage{
     @Override
     protected void addResume(Resume resume, int index) {
         if (index < 0) {
-            index = - index - 1;
+            index = -index - 1;
         }
         System.arraycopy(storage, index, storage, index + 1, carriage - index);
         storage[index] = resume;

@@ -4,7 +4,7 @@ import com.test.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage{
+public abstract class AbstractArrayStorage implements Storage {
     protected final static int MAX_SIGE = 10_000;
 
     protected Resume[] storage = new Resume[MAX_SIGE];
