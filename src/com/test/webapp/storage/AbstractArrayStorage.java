@@ -1,5 +1,8 @@
 package com.test.webapp.storage;
 
+import com.test.webapp.exception.ExistStorageException;
+import com.test.webapp.exception.NotExistStorageException;
+import com.test.webapp.exception.StorageException;
 import com.test.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -26,8 +29,7 @@ public abstract class AbstractArrayStorage implements Storage {
     public Resume get(String uuid) {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.out.println("Resume " + uuid + " not exist");
-            return null;
+            throw new NotExistStorageException(uuid);
         }
         return storage[index];
     }
@@ -35,21 +37,18 @@ public abstract class AbstractArrayStorage implements Storage {
     public void update(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index < 0) {
-            System.out.println("Error");
-            return;
+            throw new NotExistStorageException(resume.getUuid());
         }
         storage[index] = resume;
     }
 
     public void save(Resume resume) {
         if ((carriage) >= MAX_SIGE) {
-            System.out.println("Attention. Overflow");
-            return;
+            throw new StorageException("Attention. Overflow", resume.getUuid());
         }
         int index = getIndex(resume.getUuid());
         if (index >= 0) {
-            System.out.println("Resume ... " + resume.getUuid() + " already added");
-            return;
+            throw new ExistStorageException(resume.getUuid());
         }
         addResume(resume, index);
         carriage++;
@@ -62,7 +61,7 @@ public abstract class AbstractArrayStorage implements Storage {
             storage[carriage - 1] = null;
             carriage--;
         } else {
-            System.out.println("Resume ... " + uuid + " not found");
+            throw new NotExistStorageException(uuid);
         }
     }
 
