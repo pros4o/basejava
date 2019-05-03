@@ -8,9 +8,9 @@ import com.test.webapp.model.Resume;
 import java.util.Arrays;
 
 public abstract class AbstractArrayStorage implements Storage {
-    protected final static int MAX_SIGE = 10_000;
+    protected final static int MAX_SIZE = 10_000;
 
-    protected Resume[] storage = new Resume[MAX_SIGE];
+    protected Resume[] storage = new Resume[MAX_SIZE];
     protected int carriage = 0;
 
     public int size() {
@@ -43,7 +43,7 @@ public abstract class AbstractArrayStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        if ((carriage) >= MAX_SIGE) {
+        if ((carriage) >= MAX_SIZE) {
             throw new StorageException("Attention. Overflow", resume.getUuid());
         }
         int index = getIndex(resume.getUuid());
