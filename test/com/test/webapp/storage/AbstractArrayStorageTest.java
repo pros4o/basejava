@@ -1,13 +1,15 @@
 package com.test.webapp.storage;
 
-import com.test.webapp.exception.NotExistStorageException;
-import com.test.webapp.exception.StorageException;
+import com.test.webapp.exception.*;
 import com.test.webapp.model.Resume;
 import org.junit.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 
 public abstract class AbstractArrayStorageTest {
     private Storage storage;
+    private Resume[] array = {new Resume(UUID_1), new Resume(UUID_2), new Resume(UUID_3)};
 
     public AbstractArrayStorageTest(Storage storage) {
         this.storage = storage;
@@ -23,35 +25,48 @@ public abstract class AbstractArrayStorageTest {
         storage.save(new Resume(UUID_1));
         storage.save(new Resume(UUID_2));
         storage.save(new Resume(UUID_3));
+
     }
 
     @Test
     public void size() throws Exception {
-        Assert.assertEquals(3, storage.size());
+        assertEquals(3, storage.size());
     }
 
     @Test
     public void clear() throws Exception {
+        storage.clear();
+        assertEquals(0, storage.size());
     }
 
     @Test
     public void getAll() throws Exception {
+        assertArrayEquals(array, storage.getAll());
     }
 
     @Test
     public void get() throws Exception {
+        assertEquals("uuid1", storage.get(UUID_1).toString());
     }
 
     @Test
     public void update() throws Exception {
+        Resume resume = new Resume("uuid4");
+        storage.save(resume);
+        storage.update(resume);
+        assertEquals(storage.get("uuid4"), storage.get(resume.getUuid()));
     }
 
     @Test
     public void save() throws Exception {
+        storage.save(new Resume());
+        assertEquals(4, storage.size());
     }
 
-    @Test
+    @Test(expected = NotExistStorageException.class)
     public void delete() throws Exception {
+        storage.delete(UUID_1);
+        storage.get(UUID_1);
     }
 
     @Test(expected = NotExistStorageException.class)
@@ -62,7 +77,13 @@ public abstract class AbstractArrayStorageTest {
 
     @Test(expected = StorageException.class)
     public void overflow() throws Exception {
-        //заполняем
-
+        try {
+            for(int i = 4; i <= 10_000; i++) {
+                storage.save(new Resume("resume number " + i));
+            }
+        } catch (Exception ex) {
+            Assert.fail("Cannot fill storage");
+        }
+        storage.save(new Resume("last"));
     }
 }
