@@ -1,21 +1,15 @@
 package com.test.webapp.storage;
 
-import com.test.webapp.exception.ExistStorageException;
 import com.test.webapp.exception.NotExistStorageException;
 import com.test.webapp.exception.StorageException;
 import com.test.webapp.model.Resume;
 
 import java.util.Arrays;
 
-public abstract class AbstractArrayStorage implements Storage {
+public abstract class AbstractArrayStorage extends AbstractStorage {
     protected final static int MAX_SIZE = 10_000;
 
     protected Resume[] storage = new Resume[MAX_SIZE];
-    protected int carriage = 0;
-
-    public int size() {
-        return carriage;
-    }
 
     public void clear() {
         Arrays.fill(storage, 0, carriage, null);
@@ -34,35 +28,23 @@ public abstract class AbstractArrayStorage implements Storage {
         return storage[index];
     }
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
+    @Override
+    protected void updateResume(int index, Resume resume) {
         storage[index] = resume;
     }
 
+    @Override
     public void save(Resume resume) {
         if ((carriage) >= MAX_SIZE) {
             throw new StorageException("Attention. Overflow", resume.getUuid());
         }
-        int index = getIndex(resume.getUuid());
-        if (index >= 0) {
-            throw new ExistStorageException(resume.getUuid());
-        }
-        addResume(resume, index);
-        carriage++;
+        saveInStorage(resume);
     }
 
-    public void delete(String uuid) {
-        int index = getIndex(uuid);
-        if (index >= 0) {
-            deleteResume(index);
-            storage[carriage - 1] = null;
-            carriage--;
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+    @Override
+    protected void changeStorage() {
+        storage[carriage - 1] = null;
+        carriage--;
     }
 
     protected abstract int getIndex(String uuid);
