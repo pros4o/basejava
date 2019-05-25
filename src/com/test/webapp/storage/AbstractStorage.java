@@ -6,58 +6,53 @@ import com.test.webapp.model.Resume;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected int carriage = 0;
+    protected abstract void addResumeFromStorage(Resume resume, int index);
+
+    protected abstract void updateResumeFromStorage(int index, Resume resume);
+
+    protected abstract void deleteResumeFromStorage(int index);
+
+    protected abstract Resume getResumeFromStorage(int index);
+
+    protected abstract int getIndex(String uuid);
 
     public abstract void clear();
 
-    public void update(Resume resume) {
-        int index = getIndex(resume.getUuid());
-        if (index < 0) {
-            throw new NotExistStorageException(resume.getUuid());
-        }
-        updateResume(index, resume);
-    }
+    public abstract int size();
 
-    protected abstract void updateResume(int index, Resume resume);
+    public abstract Resume[] getAll();
+
+    public void update(Resume resume) {
+        int index = checkNotExistStorage(resume.getUuid());
+        updateResumeFromStorage(index, resume);
+    }
 
     public void save(Resume resume) {
-        saveInStorage(resume);
+        int index = checkExistStorage(resume);
+        addResumeFromStorage(resume, index);
     }
 
-    protected void saveInStorage(Resume resume) {
+    public Resume get(String uuid) {
+        int index = checkNotExistStorage(uuid);
+        return getResumeFromStorage(index);
+    }
+
+    public void delete(String uuid) {
+        int index = checkNotExistStorage(uuid);
+        deleteResumeFromStorage(index);
+    }
+
+    private int checkExistStorage(Resume resume) {
         int index = getIndex(resume.getUuid());
         if (index >= 0) {
             throw new ExistStorageException(resume.getUuid());
         }
-        addResume(resume, index);
-        carriage++;
+        return index;
     }
 
-    protected abstract void addResume(Resume resume, int index);
-
-    public abstract Resume get(String uuid);
-
-    public void delete(String uuid) {
+    private int checkNotExistStorage(String uuid) {
         int index = getIndex(uuid);
-        if (index >= 0) {
-            deleteResume(index);
-            changeStorage();
-        } else {
-            throw new NotExistStorageException(uuid);
-        }
+        if (index < 0) throw new NotExistStorageException(uuid);
+        return index;
     }
-
-    protected abstract void changeStorage();
-
-    protected abstract void deleteResume(int index);
-
-    public abstract Resume[] getAll();
-
-    public int size() {
-        return carriage;
-    }
-
-    protected abstract int getIndex(String uuid);
-
-
 }
