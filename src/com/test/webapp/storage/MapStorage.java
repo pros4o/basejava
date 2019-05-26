@@ -2,33 +2,32 @@ package com.test.webapp.storage;
 
 import com.test.webapp.model.Resume;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+public class MapStorage extends AbstractStorage {
 
-public class ListStorage extends AbstractStorage {
-
-    protected List<Resume> storage = new ArrayList<>();
+    Map<String, Resume> storage = new HashMap<>();
 
     @Override
     protected void addResumeFromStorage(Resume resume, Object index) {
-        storage.add(resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
     protected void updateResumeFromStorage(Object index, Resume resume) {
-        storage.set((Integer) index, resume);
+        storage.replace((String) index, resume);
     }
 
     @Override
     protected void deleteResumeFromStorage(Object index) {
-        int ind = (Integer) index;
-        storage.remove(ind);
+       storage.remove(index);
     }
 
     @Override
     protected Resume getResumeFromStorage(Object index) {
-        return storage.get((Integer) index);
+        String key = (String) index;
+        return storage.get(key);
     }
 
     @Override
@@ -43,24 +42,16 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     public Resume[] getAll() {
-        return storage.toArray(new Resume[storage.size()]);
+        return storage.values().toArray(new Resume[storage.size()]);
     }
 
     @Override
     protected Object getIndex(String uuid) {
-        int index = 0;
-        for (Resume r : storage) {
-            if (r.getUuid().equals(uuid)) {
-                return index;
-            }
-            index++;
-        }
-        return -1;
+        return uuid;
     }
 
     @Override
     protected boolean checkIndex(Object index) {
-        if ((Integer) index < 0) return false;
-        else return true;
+        return storage.containsKey(index);
     }
 }

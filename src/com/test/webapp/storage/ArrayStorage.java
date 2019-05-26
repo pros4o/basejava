@@ -8,7 +8,7 @@ import com.test.webapp.model.Resume;
 public class ArrayStorage extends AbstractArrayStorage {
 
     @Override
-    protected int getIndex(String uuid) {
+    protected Object getIndex(String uuid) {
         for (int i = 0; i < carriage; i++) {
             if (storage[i].getUuid().equals(uuid)) {
                 return i;
