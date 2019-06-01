@@ -1,6 +1,5 @@
 package com.test.webapp.storage;
 
-import com.test.webapp.exception.ExistStorageException;
 import com.test.webapp.model.Resume;
 import org.junit.Test;
 

@@ -8,11 +8,13 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected abstract void addResumeFromStorage(Resume resume, Object index);
+    protected void addResumeFromStorage(Resume resume, Object key) {
+        storage.put((String) key, resume);
+    }
 
     @Override
-    protected void updateResumeFromStorage(Object index, Resume resume) {
-        storage.replace((String) index, resume);
+    protected void updateResumeFromStorage(Object key, Resume resume) {
+        storage.replace((String) key, resume);
     }
 
     @Override
@@ -36,7 +38,11 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     }
 
     @Override
-    public abstract List<Resume> getAllSorted();
+    public List<Resume> getAllSorted() {
+        List<Resume> support = new ArrayList<>(storage.values());
+        support.sort(comparator);
+        return support;
+    }
 
     @Override
     protected abstract Object getIndex(String uuid);
