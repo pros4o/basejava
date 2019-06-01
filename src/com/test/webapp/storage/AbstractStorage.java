@@ -4,7 +4,12 @@ import com.test.webapp.exception.ExistStorageException;
 import com.test.webapp.exception.NotExistStorageException;
 import com.test.webapp.model.Resume;
 
+import java.util.Comparator;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
+
+    protected static final Comparator<? super Resume> comparator = Resume::compareTo;
 
     protected abstract void addResumeFromStorage(Resume resume, Object index);
 
@@ -20,7 +25,7 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract int size();
 
-    public abstract Resume[] getAll();
+    public abstract List<Resume> getAllSorted();
 
     public void update(Resume resume) {
         Object index = checkNotExistStorage(resume.getUuid());
@@ -28,7 +33,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public void save(Resume resume) {
-        Object index = checkExistStorage(resume);
+        Object index = checkExistStorage(resume.getUuid());
         addResumeFromStorage(resume, index);
     }
 
@@ -42,9 +47,9 @@ public abstract class AbstractStorage implements Storage {
         deleteResumeFromStorage(index);
     }
 
-    private Object checkExistStorage(Resume resume) {
-        Object index = getIndex(resume.getUuid());
-        if (checkIndex(index)) throw new ExistStorageException(resume.getUuid());
+    protected Object checkExistStorage(String key) {
+        Object index = getIndex(key);
+        if (checkIndex(index)) throw new ExistStorageException(key);
         return index;
     }
 
