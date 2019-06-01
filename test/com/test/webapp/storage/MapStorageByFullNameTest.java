@@ -7,7 +7,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MapStorageByFullNameTest extends AbstractMapStorageTest {
-    public MapStorageByFullNameTest(){
+    public MapStorageByFullNameTest() {
         super(new MapStorageByFullName());
     }
 

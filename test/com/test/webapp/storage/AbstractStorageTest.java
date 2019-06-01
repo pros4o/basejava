@@ -21,7 +21,7 @@ public class AbstractStorageTest {
     protected static final String NAME_2 = "Ada";
     protected static final String NAME_3 = "Z";
     protected static final Resume oneResume = new Resume(UUID_1, NAME_1);
-    protected static final Resume twoResume= new Resume(UUID_2, NAME_2);
+    protected static final Resume twoResume = new Resume(UUID_2, NAME_2);
     protected static final Resume threeResume = new Resume(UUID_3, NAME_3);
     protected Resume[] array;
     protected List<Resume> list;
