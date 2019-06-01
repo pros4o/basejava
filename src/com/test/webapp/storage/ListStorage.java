@@ -22,8 +22,8 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected void deleteResumeFromStorage(Object index) {
-        int ind = (Integer) index;
-        storage.remove(ind);
+        int integerIndex = (Integer) index;
+        storage.remove(integerIndex);
     }
 
     @Override
@@ -61,7 +61,6 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected boolean checkIndex(Object index) {
-        if ((Integer) index < 0) return false;
-        else return true;
+        return (Integer) index >= 0;
     }
 }

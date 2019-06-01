@@ -47,13 +47,13 @@ public abstract class AbstractStorage implements Storage {
         deleteResumeFromStorage(index);
     }
 
-    protected Object checkExistStorage(String key) {
-        Object index = getIndex(key);
-        if (checkIndex(index)) throw new ExistStorageException(key);
+    protected Object checkExistStorage(String uuid) {
+        Object index = getIndex(uuid);
+        if (checkIndex(index)) throw new ExistStorageException(uuid);
         return index;
     }
 
-    private Object checkNotExistStorage(String uuid) {
+    protected Object checkNotExistStorage(String uuid) {
         Object index = getIndex(uuid);
         if (!checkIndex(index)) throw new NotExistStorageException(uuid);
         return index;

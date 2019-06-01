@@ -6,6 +6,9 @@ import com.test.webapp.model.Resume;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
 
@@ -14,10 +17,14 @@ public class AbstractStorageTest {
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
-    protected static final Resume oneResume = new Resume(UUID_1);
-    protected static final Resume twoResume= new Resume(UUID_2);
-    protected static final Resume threeResume = new Resume(UUID_3);
+    protected static final String NAME_1 = "Bob";
+    protected static final String NAME_2 = "Ada";
+    protected static final String NAME_3 = "Z";
+    protected static final Resume oneResume = new Resume(UUID_1, NAME_1);
+    protected static final Resume twoResume= new Resume(UUID_2, NAME_2);
+    protected static final Resume threeResume = new Resume(UUID_3, NAME_3);
     protected Resume[] array;
+    protected List<Resume> list;
 
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
@@ -30,6 +37,10 @@ public class AbstractStorageTest {
         storage.save(oneResume);
         storage.save(twoResume);
         storage.save(threeResume);
+        list = new ArrayList<>(3);
+        list.add(twoResume);
+        list.add(oneResume);
+        list.add(threeResume);
     }
 
     @Test
@@ -44,8 +55,8 @@ public class AbstractStorageTest {
     }
 
     @Test
-    public void getAll() throws Exception {
-        assertArrayEquals(array, storage.getAll());
+    public void getAllSorted() throws Exception {
+        assertEquals(list, storage.getAllSorted());
     }
 
     @Test

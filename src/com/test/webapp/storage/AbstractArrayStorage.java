@@ -62,7 +62,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
 
     @Override
     protected boolean checkIndex(Object index) {
-        if ((Integer) index < 0) return false;
-        else return true;
+        return (Integer) index >= 0;
     }
 }

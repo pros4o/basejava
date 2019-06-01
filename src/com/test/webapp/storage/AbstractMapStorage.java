@@ -4,13 +4,11 @@ import com.test.webapp.model.Resume;
 
 import java.util.*;
 
-public abstract class AbstractMapStorage extends AbstractStorage{
-    Map<String, Resume> storage = new HashMap<>();
+public abstract class AbstractMapStorage extends AbstractStorage {
+    protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected void addResumeFromStorage(Resume resume, Object index) {
-        storage.put(resume.getUuid(), resume);
-    }
+    protected abstract void addResumeFromStorage(Resume resume, Object index);
 
     @Override
     protected void updateResumeFromStorage(Object index, Resume resume) {

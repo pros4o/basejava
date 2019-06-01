@@ -9,6 +9,11 @@ import java.util.List;
 public class MapStorageByUUID extends AbstractMapStorage {
 
     @Override
+    protected void addResumeFromStorage(Resume resume, Object index) {
+        storage.put(resume.getUuid(), resume);
+    }
+
+    @Override
     public List<Resume> getAllSorted() {
         List<Resume> support = new ArrayList<>(storage.values());
         support.sort(comparator);
