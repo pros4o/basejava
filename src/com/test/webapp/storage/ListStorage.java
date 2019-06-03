@@ -11,19 +11,18 @@ public class ListStorage extends AbstractStorage {
     protected List<Resume> storage = new ArrayList<>();
 
     @Override
-    protected void addResumeFromStorage(Resume resume, Object index) {
+    protected void addToStorage(Resume resume, Object index) {
         storage.add(resume);
     }
 
     @Override
-    protected void updateResumeFromStorage(Object index, Resume resume) {
+    protected void updateResumeInStorage(Object index, Resume resume) {
         storage.set((Integer) index, resume);
     }
 
     @Override
-    protected void deleteResumeFromStorage(Object index) {
-        int integerIndex = (Integer) index;
-        storage.remove(integerIndex);
+    protected void deleteResumeInStorage(Object index) {
+        storage.remove((int) index);
     }
 
     @Override
@@ -48,19 +47,17 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected Object getIndex(String uuid) {
-        int index = 0;
-        for (Resume r : storage) {
-            if (r.getUuid().equals(uuid)) {
+    protected Integer getKey(String uuid) {
+        for(int index = 0; index < storage.size(); index++) {
+            if(storage.get(index).getUuid().equals(uuid)) {
                 return index;
             }
-            index++;
         }
         return -1;
     }
 
     @Override
-    protected boolean checkIndex(Object index) {
+    protected boolean checkKey(Object index) {
         return (Integer) index >= 0;
     }
 }

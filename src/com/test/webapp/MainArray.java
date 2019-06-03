@@ -14,7 +14,7 @@ import java.util.List;
  * (just run, no need to understand)
  */
 public class MainArray {
-    private final static Storage ARRAY_STORAGE = new MapStorageByFullName();
+    private final static Storage ARRAY_STORAGE = new MapStorageByResume();
 
     public static void main(String[] args) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -57,7 +57,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.get(uuid));
                     break;
                 case "update":
-                    r = new Resume(uuid);
+                    r = new Resume(uuid, fullName);
                     ARRAY_STORAGE.update(r);
                     printAll();
                     break;
