@@ -28,12 +28,10 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> support = new ArrayList<>(storage.values());
-        support.sort(comparator);
-        return support;
-    }
+    protected abstract Object getKey(String uuid);
 
     @Override
-    protected abstract Object getKey(String uuid);
+    protected List<Resume> mirrorAll() {
+        return new ArrayList<Resume>(storage.values());
+    }
 }

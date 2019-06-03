@@ -1,20 +1,20 @@
 package com.test.webapp.model;
 
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume> {
+public class Resume implements Comparable<Resume>{
 
     // Unique identifier
     private String uuid;
     private String fullName;
 
     public Resume(String fullName) {
-        this.uuid = UUID.randomUUID().toString();
-        this.fullName = fullName;
+        this(UUID.randomUUID().toString(), fullName);
     }
 
     public Resume(String uuid, String fullName) {
@@ -55,6 +55,8 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public int compareTo(Resume o) {
-        return uuid.compareTo(o.uuid);
+        int checkResume = fullName.compareTo(o.fullName);
+        if (checkResume == 0) return uuid.compareTo(o.uuid);
+        return checkResume;
     }
 }

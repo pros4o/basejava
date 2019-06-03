@@ -48,10 +48,8 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        Resume[] temp = Arrays.copyOfRange(storage, 0, carriage);
-        Arrays.sort(temp, comparator);
-        return new ArrayList<>(Arrays.asList(temp));
+    protected List<Resume> mirrorAll() {
+        return Arrays.asList(Arrays.copyOfRange(storage, 0, carriage));
     }
 
     protected abstract void deleteResume(int index);

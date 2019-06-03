@@ -41,19 +41,18 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        storage.sort(comparator);
-        return storage;
-    }
-
-    @Override
     protected Integer getKey(String uuid) {
-        for(int index = 0; index < storage.size(); index++) {
-            if(storage.get(index).getUuid().equals(uuid)) {
-                return index;
+        for(int i = 0; i < storage.size(); i++) {
+            if(storage.get(i).getUuid().equals(uuid)) {
+                return i;
             }
         }
         return -1;
+    }
+
+    @Override
+    protected List<Resume> mirrorAll() {
+        return new ArrayList<Resume>(storage);
     }
 
     @Override
