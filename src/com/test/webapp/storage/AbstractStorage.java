@@ -8,8 +8,6 @@ import java.util.*;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static final Comparator<Resume> COMPARATOR = ((o1, o2) -> o1.getUuid().compareTo(o2.getUuid()));
-
     protected abstract void addToStorage(Resume resume, Object index);
 
     protected abstract void updateResumeInStorage(Object index, Resume resume);
@@ -20,21 +18,25 @@ public abstract class AbstractStorage implements Storage {
 
     protected abstract Object getKey(String uuid);
 
+    @Override
     public void update(Resume resume) {
         Object key = getSearchKeyIfExist(resume.getUuid());
         updateResumeInStorage(key, resume);
     }
 
+    @Override
     public void save(Resume resume) {
         Object key = getSearchKeyIfNotExist(resume.getUuid());
         addToStorage(resume, key);
     }
 
+    @Override
     public Resume get(String uuid) {
         Object key = getSearchKeyIfExist(uuid);
         return getResumeFromStorage(key);
     }
 
+    @Override
     public void delete(String uuid) {
         Object key = getSearchKeyIfExist(uuid);
         deleteResumeInStorage(key);
@@ -42,12 +44,12 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        List<Resume> resumeList = mirrorAll();
+        List<Resume> resumeList = copyAll();
         Collections.sort(resumeList);
         return resumeList;
     }
 
-    protected abstract List<Resume> mirrorAll();
+    protected abstract List<Resume> copyAll();
 
     private Object getSearchKeyIfNotExist(String uuid) {
         Object key = getKey(uuid);

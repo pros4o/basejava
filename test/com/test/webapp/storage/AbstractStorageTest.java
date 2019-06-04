@@ -17,8 +17,8 @@ public class AbstractStorageTest {
     protected static final String UUID_1 = "uuid1";
     protected static final String UUID_2 = "uuid2";
     protected static final String UUID_3 = "uuid3";
-    protected static final Resume oneResume = new Resume(UUID_1, "Bob");
-    protected static final Resume twoResume = new Resume(UUID_2, "Ada");
+    protected static final Resume oneResume = new Resume(UUID_1, "Ada");
+    protected static final Resume twoResume = new Resume(UUID_2, "Bob");
     protected static final Resume threeResume = new Resume(UUID_3, "Z");
     protected static final Resume resume = new Resume("uuid4", "X");
 
@@ -29,8 +29,8 @@ public class AbstractStorageTest {
     @Before
     public void setUp() throws Exception {
         storage.clear();
-        storage.save(oneResume);
         storage.save(twoResume);
+        storage.save(oneResume);
         storage.save(threeResume);
     }
 
@@ -48,7 +48,7 @@ public class AbstractStorageTest {
     @Test
     public void getAllSorted() throws Exception {
         List<Resume> sortedList = storage.getAllSorted();
-        assertEquals(sortedList, Arrays.asList(twoResume, oneResume, threeResume));
+        assertEquals(Arrays.asList(oneResume, twoResume, threeResume), sortedList);
     }
 
     @Test

@@ -31,7 +31,7 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     protected abstract Object getKey(String uuid);
 
     @Override
-    protected List<Resume> mirrorAll() {
+    protected List<Resume> copyAll() {
         return new ArrayList<Resume>(storage.values());
     }
 }

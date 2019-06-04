@@ -42,8 +42,8 @@ public class ListStorage extends AbstractStorage {
 
     @Override
     protected Integer getKey(String uuid) {
-        for(int i = 0; i < storage.size(); i++) {
-            if(storage.get(i).getUuid().equals(uuid)) {
+        for (int i = 0; i < storage.size(); i++) {
+            if (storage.get(i).getUuid().equals(uuid)) {
                 return i;
             }
         }
@@ -51,7 +51,7 @@ public class ListStorage extends AbstractStorage {
     }
 
     @Override
-    protected List<Resume> mirrorAll() {
+    protected List<Resume> copyAll() {
         return new ArrayList<Resume>(storage);
     }
 

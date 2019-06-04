@@ -32,6 +32,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         carriage--;
     }
 
+    @Override
     protected Resume getResumeFromStorage(Object index) {
         return storage[(Integer) index];
     }
@@ -48,7 +49,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    protected List<Resume> mirrorAll() {
+    protected List<Resume> copyAll() {
         return Arrays.asList(Arrays.copyOfRange(storage, 0, carriage));
     }
 
