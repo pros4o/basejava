@@ -1,8 +1,6 @@
 package com.test.webapp.model;
 
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Initial resume class
@@ -10,8 +8,11 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume>{
 
     // Unique identifier
-    private String uuid;
-    private String fullName;
+    private final String uuid;
+    private final String fullName;
+
+    private Map<SectionType, Section> sections = new HashMap<>();
+    private Map<ContactType, String> contactInfo = new HashMap<>();
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -22,16 +23,20 @@ public class Resume implements Comparable<Resume>{
         this.fullName = fullName;
     }
 
+    public void putIntoSections(SectionType sectionType, Section section) {
+        sections.put(sectionType, section);
+    }
+
+    public void putIntoContactInfo(ContactType contactType, String info){
+        contactInfo.put(contactType, info);
+    }
+
     public String getUuid() {
         return uuid;
     }
 
     public String getFullName() {
         return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     @Override
