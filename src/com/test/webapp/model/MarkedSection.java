@@ -1,11 +1,10 @@
 package com.test.webapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class MarkedSection extends Section {
-    private List<String> textArea = new ArrayList<>();
+public class MarkedSection extends AbstractSection {
+    private List<String> textArea;
 
     public MarkedSection(List<String> textArea) {
         this.textArea = textArea;

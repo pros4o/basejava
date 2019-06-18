@@ -85,4 +85,15 @@ public class Institutions {
     public int hashCode() {
         return Objects.hash(startPeriod, endPeriod, linkName, linkURL, content, nameInstitutions);
     }
+
+    @Override
+    public String toString() {
+        return "Institutions: " +
+                "startPeriod=" + startPeriod +
+                ", endPeriod=" + endPeriod +
+                ", linkName='" + linkName + '\'' +
+                ", linkURL='" + linkURL + '\'' +
+                ", content='" + content + '\'' +
+                ", nameInstitutions='" + nameInstitutions + '\'';
+    }
 }

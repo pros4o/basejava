@@ -1,11 +1,10 @@
 package com.test.webapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class InstitutionsSection extends Section {
-    private List<Institutions> listInst = new ArrayList<>();
+public class InstitutionsSection extends AbstractSection {
+    private List<Institutions> listInst;
 
     public void setListInst(List<Institutions> listInst) {
         this.listInst = listInst;

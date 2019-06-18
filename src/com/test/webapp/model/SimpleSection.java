@@ -2,7 +2,7 @@ package com.test.webapp.model;
 
 import java.util.Objects;
 
-public class SimpleSection extends Section {
+public class SimpleSection extends AbstractSection {
     private String info;
 
     public SimpleSection(String info) {

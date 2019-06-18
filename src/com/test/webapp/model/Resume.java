@@ -1,18 +1,19 @@
 package com.test.webapp.model;
 
+import sun.swing.SwingUtilities2;
+
 import java.util.*;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume>{
+public class Resume implements Comparable<Resume> {
 
     // Unique identifier
     private final String uuid;
     private final String fullName;
-
-    private Map<SectionType, Section> sections = new HashMap<>();
-    private Map<ContactType, String> contactInfo = new HashMap<>();
+    private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
+    private Map<ContactType, String> contactInfo = new EnumMap<>(ContactType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -23,11 +24,19 @@ public class Resume implements Comparable<Resume>{
         this.fullName = fullName;
     }
 
-    public void putIntoSections(SectionType sectionType, Section section) {
-        sections.put(sectionType, section);
+    public AbstractSection getSections(SectionType type) {
+        return sections.get(type);
     }
 
-    public void putIntoContactInfo(ContactType contactType, String info){
+    public String getContactInfo(ContactType contactType) {
+        return contactInfo.get(contactType);
+    }
+
+    public void putIntoSections(SectionType sectionType, AbstractSection abstractSection) {
+        sections.put(sectionType, abstractSection);
+    }
+
+    public void putIntoContactInfo(ContactType contactType, String info) {
         contactInfo.put(contactType, info);
     }
 

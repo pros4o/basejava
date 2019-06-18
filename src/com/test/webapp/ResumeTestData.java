@@ -88,5 +88,7 @@ public class ResumeTestData {
                 "'Functional Programming Principles in Scala' by Martin Odersky", "Coursera"
         ));
         resume.putIntoSections(SectionType.EDUCATION, new InstitutionsSection(institutionsStudy));
+        System.out.println(ContactType.HOMEPAGE.getContactName() + " " + resume.getContactInfo(ContactType.HOMEPAGE));
+        System.out.println(SectionType.EDUCATION + " " + resume.getSections(SectionType.EDUCATION));
     }
 }
