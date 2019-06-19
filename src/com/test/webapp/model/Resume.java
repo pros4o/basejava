@@ -50,7 +50,16 @@ public class Resume implements Comparable<Resume> {
 
     @Override
     public String toString() {
-        return fullName;
+        StringBuilder result = new StringBuilder();
+        result.append(fullName + "\n");
+        for (ContactType contactType : ContactType.values()) {
+            result.append(contactType + ": " + getContactInfo(contactType) + "\n");
+        }
+        for (SectionType sectionType : SectionType.values()) {
+            result.append(sectionType + ": " + getSections(sectionType) + "\n");
+        }
+
+        return result.toString();
     }
 
     @Override
