@@ -3,18 +3,19 @@ package com.test.webapp.model;
 import java.util.Objects;
 
 public class SimpleSection extends AbstractSection {
-    private String info;
+    private String content;
 
-    public SimpleSection(String info) {
-        this.info = info;
+    public SimpleSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
+        this.content = content;
     }
 
     public String getInfo() {
-        return info;
+        return content;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    public void setInfo(String content) {
+        this.content = content;
     }
 
     @Override
@@ -22,16 +23,16 @@ public class SimpleSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SimpleSection that = (SimpleSection) o;
-        return Objects.equals(info, that.info);
+        return Objects.equals(content, that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(info);
+        return Objects.hash(content);
     }
 
     @Override
     public String toString() {
-        return info;
+        return content;
     }
 }

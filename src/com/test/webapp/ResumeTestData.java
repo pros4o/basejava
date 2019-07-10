@@ -1,7 +1,7 @@
 package com.test.webapp;
 
 import com.test.webapp.model.*;
-
+import com.test.webapp.util.DateUtil;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Resume resume = new Resume("Ada");
+        Resume resume = new Resume("Григорий Кислин");
 
         resume.putIntoContactInfo(ContactType.TELEPHONE, "+7(921) 855-0482");
         resume.putIntoContactInfo(ContactType.SKYPE, "grigory.kislin");
@@ -46,6 +46,7 @@ public class ResumeTestData {
                 " России (Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
         resume.putIntoSections(SectionType.ACHIEVEMENT, new MarkedSection(textAreaAchievement));
 
+
         List<String> textAreaQualifications = new ArrayList<>(15);
         textAreaQualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2 ");
         textAreaQualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce ");
@@ -71,24 +72,104 @@ public class ResumeTestData {
         textAreaQualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.putIntoSections(SectionType.QUALIFICATIONS, new MarkedSection(textAreaQualifications));
 
-        List<Institutions> institutionsJob = new ArrayList<>();
-        institutionsJob.add(new Institutions(LocalDate.parse("1/10/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
-                LocalDate.now(), "Java Online Projects", "http://javaops.ru/", "Автор проекта.\nСоздание, организация" +
-                " и проведение Java онлайн проектов и стажировок.",
-                "Java Online Projects"));
-        institutionsJob.add(new Institutions(LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
-                LocalDate.parse("1/01/2016", DateTimeFormatter.ofPattern("d/MM/yyyy")),
-                "Wrike", "https://www.wrike.com", "Старший разработчик (backend).\nПроектирование и разработка онлайн платформы " +
-                "управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). " +
-                "Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.", "Wrike."));
-        resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionsSection(institutionsJob));
 
-        List<Institutions> institutionsStudy = new ArrayList<>();
-        institutionsStudy.add(new Institutions(LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
-                LocalDate.parse("1/01/2016", DateTimeFormatter.ofPattern("d/MM/yyyy")), "Coursera", "https://www.coursera.org/course/progfun",
-                "'Functional Programming Principles in Scala' by Martin Odersky", "Coursera"
+        resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionsSection(
+                new Institutions(
+                        new Link("Java Online Projects", "http://javaops.ru/"),
+                        new Position(
+                                LocalDate.parse("1/10/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.now(),
+                                "Автор проекта.",
+                                "Создание, организация и проведение Java онлайн проектов и стажировок."
+                        )),
+                new Institutions(
+                        new Link("Wrike", "https://www.wrike.com/"),
+                        new Position(
+                                LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/01/2016", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "Старший разработчик (backend)",
+                                "Старший разработчик (backend)\n" +
+                                        "Проектирование и разработка онлайн платформы управления проектами Wrike (Java" +
+                                        " 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
+                                        " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."
+                        )),
+                new Institutions(
+                    new Link("RIT Center", ""),
+                    new Position(
+                            LocalDate.parse("1/04/2012", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                            LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                            "Java архитектор",
+                            "Организация процесса разработки системы ERP для разных окружений: релизная" +
+                                    " политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация " +
+                                    "Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД " +
+                                    "и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C" +
+                                    " (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html)." +
+                                    " Интеграция Alfresco JLAN для online редактирование из браузера документов " +
+                                    "MS Office. Maven + plugin development, Ant, Apache Commons, Spring security," +
+                                    " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell" +
+                                    " remote scripting via ssh tunnels, PL/Python"
+                    )
+                    )
+                ));
+
+        resume.putIntoSections(SectionType.EDUCATION, new InstitutionsSection(
+                new Institutions(
+                        new Link("Coursera", "https://www.coursera.org/course/progfun"),
+                        new Position(
+                                LocalDate.parse("1/03/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/05/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "\"Functional Programming Principles in Scala\" by Martin Odersky",
+                                ""
+                        )
+                ),
+                new Institutions(
+                        new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
+                        new Position(
+                                LocalDate.parse("1/03/2011", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/04/2011", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
+                                ""
+                        )
+                ),
+                new Institutions(
+                        new Link("Siemens AG", "http://www.siemens.ru/"),
+                        new Position(
+                                LocalDate.parse("1/01/2005", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/05/2005", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "3 месяца обучения мобильным IN сетям (Берлин)",
+                                ""
+                        )
+                ),
+                new Institutions(
+                        new Link("Alcatel", "http://www.alcatel.ru/"),
+                        new Position(
+                                LocalDate.parse("1/09/1997", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/03/1998", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                " \t6 месяцев обучения цифровым телефонным сетям (Москва)",
+                                ""
+                        )
+                ),
+                new Institutions(
+                        new Link("Санкт-Петербургский национальный исследовательский университет информационных" +
+                                " технологий, механики и оптики", "http://www.ifmo.ru/"),
+                        new Position(
+                                LocalDate.parse("1/09/1993", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/07/1996", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "Аспирантура (программист С, С++)",
+                                ""
+                        ),
+                        new Position(
+                                LocalDate.parse("1/09/1987", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/07/1993", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "Инженер (программист Fortran, C)",
+                                ""
+                        )
+                )
         ));
-        resume.putIntoSections(SectionType.EDUCATION, new InstitutionsSection(institutionsStudy));
+
+
+
+
         System.out.println(resume);
     }
 }

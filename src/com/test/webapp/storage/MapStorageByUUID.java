@@ -2,15 +2,15 @@ package com.test.webapp.storage;
 
 import com.test.webapp.model.Resume;
 
-public class MapStorageByUUID extends AbstractMapStorage {
+public class MapStorageByUUID extends AbstractMapStorage<String> {
 
     @Override
-    protected void deleteResumeInStorage(Object key) {
+    protected void deleteResumeInStorage(String key) {
         storage.remove(key);
     }
 
     @Override
-    protected Resume getResumeFromStorage(Object key) {
+    protected Resume getResumeFromStorage(String key) {
         return storage.get(key);
     }
 
@@ -20,7 +20,7 @@ public class MapStorageByUUID extends AbstractMapStorage {
     }
 
     @Override
-    protected boolean checkKey(Object key) {
+    protected boolean checkKey(String key) {
         return storage.containsKey(key);
     }
 }

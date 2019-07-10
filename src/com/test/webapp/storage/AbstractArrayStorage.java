@@ -5,36 +5,36 @@ import com.test.webapp.model.Resume;
 
 import java.util.*;
 
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
 
     protected final static int MAX_SIZE = 10_000;
     protected int carriage = 0;
     protected Resume[] storage = new Resume[MAX_SIZE];
 
     @Override
-    protected void addToStorage(Resume resume, Object index) {
+    protected void addToStorage(Resume resume, Integer index) {
         if (carriage >= MAX_SIZE) {
             throw new StorageException("Attention. Overflow", resume.getUuid());
         }
-        addResume(resume, (Integer) index);
+        addResume(resume, index);
         carriage++;
     }
 
     @Override
-    protected void updateResumeInStorage(Object index, Resume resume) {
-        storage[(Integer) index] = resume;
+    protected void updateResumeInStorage(Integer index, Resume resume) {
+        storage[index] = resume;
     }
 
     @Override
-    protected void deleteResumeInStorage(Object index) {
-        deleteResume((Integer) index);
+    protected void deleteResumeInStorage(Integer index) {
+        deleteResume(index);
         storage[carriage - 1] = null;
         carriage--;
     }
 
     @Override
-    protected Resume getResumeFromStorage(Object index) {
-        return storage[(Integer) index];
+    protected Resume getResumeFromStorage(Integer index) {
+        return storage[index];
     }
 
     @Override
@@ -58,7 +58,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     protected abstract void addResume(Resume resume, int index);
 
     @Override
-    protected boolean checkKey(Object index) {
-        return (Integer) index >= 0;
+    protected boolean checkKey(Integer index) {
+        return index >= 0;
     }
 }

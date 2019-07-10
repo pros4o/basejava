@@ -1,20 +1,22 @@
 package com.test.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class InstitutionsSection extends AbstractSection {
     private List<Institutions> listInst;
 
-    public void setListInst(List<Institutions> listInst) {
-        this.listInst = listInst;
-    }
-
     public List<Institutions> getListInst() {
         return listInst;
     }
 
+    public InstitutionsSection(Institutions ... institutions){
+        this(Arrays.asList(institutions));
+    }
+
     public InstitutionsSection(List<Institutions> listInst) {
+        Objects.requireNonNull(listInst, "institutions must not be null");
         this.listInst = listInst;
     }
 

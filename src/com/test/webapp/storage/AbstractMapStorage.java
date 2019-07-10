@@ -4,16 +4,16 @@ import com.test.webapp.model.Resume;
 
 import java.util.*;
 
-public abstract class AbstractMapStorage extends AbstractStorage {
+public abstract class AbstractMapStorage<SK> extends AbstractStorage<SK> {
     protected Map<String, Resume> storage = new HashMap<>();
 
     @Override
-    protected void addToStorage(Resume resume, Object key) {
+    protected void addToStorage(Resume resume, SK key) {
         storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected void updateResumeInStorage(Object key, Resume resume) {
+    protected void updateResumeInStorage(SK key, Resume resume) {
         storage.replace(resume.getUuid(), resume);
     }
 
@@ -28,7 +28,7 @@ public abstract class AbstractMapStorage extends AbstractStorage {
     }
 
     @Override
-    protected abstract Object getKey(String uuid);
+    protected abstract SK getKey(String uuid);
 
     @Override
     protected List<Resume> copyAll() {
