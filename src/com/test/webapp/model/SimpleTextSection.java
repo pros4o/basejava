@@ -2,10 +2,10 @@ package com.test.webapp.model;
 
 import java.util.Objects;
 
-public class SimpleSection extends AbstractSection {
+public class SimpleTextSection extends AbstractSection {
     private String content;
 
-    public SimpleSection(String content) {
+    public SimpleTextSection(String content) {
         Objects.requireNonNull(content, "content must not be null");
         this.content = content;
     }
@@ -22,7 +22,7 @@ public class SimpleSection extends AbstractSection {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SimpleSection that = (SimpleSection) o;
+        SimpleTextSection that = (SimpleTextSection) o;
         return Objects.equals(content, that.content);
     }
 

@@ -71,38 +71,40 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected List<Resume> copyAll() {
         List<Resume> listResume = new ArrayList<>();
         File[] listFile = directory.listFiles();
-        for (File file : listFile) {
-            try {
-                listResume.add(doRead(file));
-            } catch (IOException e) {
-                throw new StorageException("IO error", file.getName(), e);
+        if (listFile != null) {
+            for (File file : listFile) {
+                try {
+                    listResume.add(doRead(file));
+                } catch (IOException e) {
+                    throw new StorageException("IO error", file.getName(), e);
+                }
             }
-        }
+        } else throw new IllegalArgumentException(directory.getAbsolutePath() + " is not exist");
         return listResume;
     }
 
     @Override
-    protected boolean checkKey(File file) {
+    protected boolean isExist(File file) {
         return file.exists();
     }
 
     @Override
     public void clear() {
         File[] listFile = directory.listFiles();
-        for (File file : listFile) {
-            file.delete();
-        }
+        if (listFile != null) {
+            for (File file : listFile) {
+                file.delete();
+            }
+        } else throw new IllegalArgumentException(directory.getAbsolutePath() + " is not exist");
     }
 
     @Override
     public int size() {
-        int count = 0;
+        int size = 0;
         String[] list = directory.list();
         if (list != null) {
-            for (String name : list) {
-                count++;
-            }
+            size = list.length;
         } else throw new IllegalArgumentException(directory.getAbsolutePath() + " is not create");
-        return count;
+        return size;
     }
 }

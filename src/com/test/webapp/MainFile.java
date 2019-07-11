@@ -36,13 +36,14 @@ public class MainFile {
 
     private static void showDirecoty(File dir) {
             File[] innerFile = dir.listFiles();
-            for (File some : innerFile) {
-                if (some.isDirectory()) {
-                    System.out.println(some.getName());
-                    showDirecoty(some);
-                } else if (some.isFile()) {
-                    System.out.println(some.getName());
+            if(innerFile != null) {
+                for (File file : innerFile) {
+                    if (file.isDirectory()) {
+                        showDirecoty(file);
+                    } else if (file.isFile()) {
+                        System.out.println(file.getName());
+                    }
                 }
-            }
+            } else throw new IllegalArgumentException(innerFile.toString() + " is not exist");
     }
 }

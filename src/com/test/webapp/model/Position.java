@@ -16,6 +16,22 @@ public class Position {
         this.description = description;
     }
 
+    public LocalDate getStartPeriod() {
+        return startPeriod;
+    }
+
+    public LocalDate getEndPeriod() {
+        return endPeriod;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public String toString() {
         return "Position{" +
@@ -40,21 +56,5 @@ public class Position {
     @Override
     public int hashCode() {
         return Objects.hash(startPeriod, endPeriod, title, description);
-    }
-
-    public LocalDate getStartPeriod() {
-        return startPeriod;
-    }
-
-    public LocalDate getEndPeriod() {
-        return endPeriod;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
     }
 }

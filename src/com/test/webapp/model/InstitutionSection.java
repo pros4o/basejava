@@ -4,18 +4,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class InstitutionsSection extends AbstractSection {
-    private List<Institutions> listInst;
+public class InstitutionSection extends AbstractSection {
+    private List<Institution> listInst;
 
-    public List<Institutions> getListInst() {
+    public List<Institution> getListInst() {
         return listInst;
     }
 
-    public InstitutionsSection(Institutions ... institutions){
+    public InstitutionSection(Institution... institutions) {
         this(Arrays.asList(institutions));
     }
 
-    public InstitutionsSection(List<Institutions> listInst) {
+    public InstitutionSection(List<Institution> listInst) {
         Objects.requireNonNull(listInst, "institutions must not be null");
         this.listInst = listInst;
     }
@@ -24,7 +24,7 @@ public class InstitutionsSection extends AbstractSection {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        InstitutionsSection that = (InstitutionsSection) o;
+        InstitutionSection that = (InstitutionSection) o;
         return Objects.equals(listInst, that.listInst);
     }
 

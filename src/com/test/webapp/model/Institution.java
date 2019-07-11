@@ -4,15 +4,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class Institutions {
+public class Institution {
     private final Link homePage;
     private List<Position> positions;
 
-    public Institutions(Link homePage, Position ... positions) {
+    public Institution(Link homePage, Position... positions) {
         this(homePage, Arrays.asList(positions));
     }
 
-    public Institutions(Link homePage, List<Position> positions) {
+    public Institution(Link homePage, List<Position> positions) {
         this.homePage = homePage;
         this.positions = positions;
     }
@@ -27,7 +27,7 @@ public class Institutions {
 
     @Override
     public String toString() {
-        return "Institutions{" +
+        return "Institution{" +
                 "homePage=" + homePage +
                 ", positions=" + positions +
                 '}';
@@ -37,7 +37,7 @@ public class Institutions {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Institutions that = (Institutions) o;
+        Institution that = (Institution) o;
         return Objects.equals(homePage, that.homePage) &&
                 Objects.equals(positions, that.positions);
     }

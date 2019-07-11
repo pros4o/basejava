@@ -1,7 +1,7 @@
 package com.test.webapp;
 
 import com.test.webapp.model.*;
-import com.test.webapp.util.DateUtil;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -10,7 +10,11 @@ import java.util.List;
 public class ResumeTestData {
     public static void main(String[] args) {
         Resume resume = new Resume("Григорий Кислин");
+        ResumeTestData.fillContentResume(resume);
+        System.out.println(resume);
+    }
 
+    public static void fillContentResume(Resume resume) {
         resume.putIntoContactInfo(ContactType.TELEPHONE, "+7(921) 855-0482");
         resume.putIntoContactInfo(ContactType.SKYPE, "grigory.kislin");
         resume.putIntoContactInfo(ContactType.MAIL, "gkislin@yandex.ru");
@@ -19,9 +23,9 @@ public class ResumeTestData {
         resume.putIntoContactInfo(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.putIntoContactInfo(ContactType.HOMEPAGE, "http://gkislin.ru/");
 
-        resume.putIntoSections(SectionType.PERSONAL, new SimpleSection("Ведущий стажировок " +
+        resume.putIntoSections(SectionType.PERSONAL, new SimpleTextSection("Ведущий стажировок " +
                 "и корпоративного обучения по Java Web и Enterprise технологиям"));
-        resume.putIntoSections(SectionType.OBJECTIVE, new SimpleSection("Аналитический склад ума," +
+        resume.putIntoSections(SectionType.OBJECTIVE, new SimpleTextSection("Аналитический склад ума," +
                 " сильная логика, креативность, инициативность. Пурист кода и архитектуры. "));
 
         List<String> textAreaAchievement = new ArrayList<>(6);
@@ -73,8 +77,8 @@ public class ResumeTestData {
         resume.putIntoSections(SectionType.QUALIFICATIONS, new MarkedSection(textAreaQualifications));
 
 
-        resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionsSection(
-                new Institutions(
+        resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
+                new Institution(
                         new Link("Java Online Projects", "http://javaops.ru/"),
                         new Position(
                                 LocalDate.parse("1/10/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
@@ -82,7 +86,7 @@ public class ResumeTestData {
                                 "Автор проекта.",
                                 "Создание, организация и проведение Java онлайн проектов и стажировок."
                         )),
-                new Institutions(
+                new Institution(
                         new Link("Wrike", "https://www.wrike.com/"),
                         new Position(
                                 LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
@@ -93,27 +97,27 @@ public class ResumeTestData {
                                         " 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis)." +
                                         " Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO."
                         )),
-                new Institutions(
-                    new Link("RIT Center", ""),
-                    new Position(
-                            LocalDate.parse("1/04/2012", DateTimeFormatter.ofPattern("d/MM/yyyy")),
-                            LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
-                            "Java архитектор",
-                            "Организация процесса разработки системы ERP для разных окружений: релизная" +
-                                    " политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация " +
-                                    "Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД " +
-                                    "и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C" +
-                                    " (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html)." +
-                                    " Интеграция Alfresco JLAN для online редактирование из браузера документов " +
-                                    "MS Office. Maven + plugin development, Ant, Apache Commons, Spring security," +
-                                    " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell" +
-                                    " remote scripting via ssh tunnels, PL/Python"
-                    )
-                    )
-                ));
+                new Institution(
+                        new Link("RIT Center", ""),
+                        new Position(
+                                LocalDate.parse("1/04/2012", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
+                                "Java архитектор",
+                                "Организация процесса разработки системы ERP для разных окружений: релизная" +
+                                        " политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация " +
+                                        "Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД " +
+                                        "и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C" +
+                                        " (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html)." +
+                                        " Интеграция Alfresco JLAN для online редактирование из браузера документов " +
+                                        "MS Office. Maven + plugin development, Ant, Apache Commons, Spring security," +
+                                        " Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell" +
+                                        " remote scripting via ssh tunnels, PL/Python"
+                        )
+                )
+        ));
 
-        resume.putIntoSections(SectionType.EDUCATION, new InstitutionsSection(
-                new Institutions(
+        resume.putIntoSections(SectionType.EDUCATION, new InstitutionSection(
+                new Institution(
                         new Link("Coursera", "https://www.coursera.org/course/progfun"),
                         new Position(
                                 LocalDate.parse("1/03/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
@@ -122,7 +126,7 @@ public class ResumeTestData {
                                 ""
                         )
                 ),
-                new Institutions(
+                new Institution(
                         new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
                         new Position(
                                 LocalDate.parse("1/03/2011", DateTimeFormatter.ofPattern("d/MM/yyyy")),
@@ -131,7 +135,7 @@ public class ResumeTestData {
                                 ""
                         )
                 ),
-                new Institutions(
+                new Institution(
                         new Link("Siemens AG", "http://www.siemens.ru/"),
                         new Position(
                                 LocalDate.parse("1/01/2005", DateTimeFormatter.ofPattern("d/MM/yyyy")),
@@ -140,7 +144,7 @@ public class ResumeTestData {
                                 ""
                         )
                 ),
-                new Institutions(
+                new Institution(
                         new Link("Alcatel", "http://www.alcatel.ru/"),
                         new Position(
                                 LocalDate.parse("1/09/1997", DateTimeFormatter.ofPattern("d/MM/yyyy")),
@@ -149,7 +153,7 @@ public class ResumeTestData {
                                 ""
                         )
                 ),
-                new Institutions(
+                new Institution(
                         new Link("Санкт-Петербургский национальный исследовательский университет информационных" +
                                 " технологий, механики и оптики", "http://www.ifmo.ru/"),
                         new Position(
@@ -166,10 +170,5 @@ public class ResumeTestData {
                         )
                 )
         ));
-
-
-
-
-        System.out.println(resume);
     }
 }

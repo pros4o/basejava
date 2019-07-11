@@ -58,7 +58,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected abstract void addResume(Resume resume, int index);
 
     @Override
-    protected boolean checkKey(Integer index) {
+    protected boolean isExist(Integer index) {
         return index >= 0;
     }
 }

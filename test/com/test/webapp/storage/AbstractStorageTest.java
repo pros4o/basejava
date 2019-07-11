@@ -1,5 +1,6 @@
 package com.test.webapp.storage;
 
+import com.test.webapp.ResumeTestData;
 import com.test.webapp.exception.ExistStorageException;
 import com.test.webapp.exception.NotExistStorageException;
 import com.test.webapp.model.Resume;
@@ -21,7 +22,11 @@ public class AbstractStorageTest {
     protected static final Resume twoResume = new Resume(UUID_2, "Bob");
     protected static final Resume threeResume = new Resume(UUID_3, "Z");
     protected static final Resume resume = new Resume("uuid4", "X");
-
+    {
+        ResumeTestData.fillContentResume(oneResume);
+        ResumeTestData.fillContentResume(twoResume);
+        ResumeTestData.fillContentResume(threeResume);
+    }
     public AbstractStorageTest(Storage storage) {
         this.storage = storage;
     }
