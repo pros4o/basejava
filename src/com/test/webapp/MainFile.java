@@ -35,17 +35,17 @@ public class MainFile {
         showDirecoty(searchFilePath, deep);
     }
 
-    private static void showDirecoty(File dir) {
-            File[] innerFile = dir.listFiles();
-            if(innerFile != null) {
-                for (File file : innerFile) {
-                    if (file.isDirectory()) {
-                        showDirecoty(file);
-                    } else if (file.isFile()) {
-                        System.out.println(file.getName());
-                    }
-                }
-            } else throw new IllegalArgumentException(innerFile.toString() + " is not exist");
+    private static void showDirecoty(File dir, int deep) {
+        File[] innerFile = dir.listFiles();
+        for (File some : innerFile) {
+            if (some.isDirectory()) {
+                System.out.println(createMessage(deep, some));
+                showDirecoty(some, ++deep);
+                deep--;
+            } else if (some.isFile()) {
+                System.out.println(createMessage(deep, some));
+            }
+        }
     }
     private static String createMessage(int deep, File file) {
         int i = 0;
