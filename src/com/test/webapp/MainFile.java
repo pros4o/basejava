@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class MainFile {
     public static void main(String[] args) throws IOException {
-       String filePath = ".\\.gitignore";
+        String filePath = ".\\.gitignore";
 
         File file = new File(filePath);
         try {
@@ -31,7 +31,8 @@ public class MainFile {
         }
 
         File searchFilePath = new File("src/com/test/webapp");
-        showDirecoty(searchFilePath);
+        int deep = 0;
+        showDirecoty(searchFilePath, deep);
     }
 
     private static void showDirecoty(File dir) {
@@ -45,5 +46,15 @@ public class MainFile {
                     }
                 }
             } else throw new IllegalArgumentException(innerFile.toString() + " is not exist");
+    }
+    private static String createMessage(int deep, File file) {
+        int i = 0;
+        StringBuilder message = new StringBuilder();
+        while (i < deep) {
+            message.append("\t");
+            i++;
+        }
+        message.append(file.getName());
+        return message.toString();
     }
 }
