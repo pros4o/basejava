@@ -3,8 +3,7 @@ package com.test.webapp.storage;
 import com.test.webapp.exception.StorageException;
 import com.test.webapp.model.Resume;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,18 +28,18 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     protected void addToStorage(Resume resume, File file) {
         try {
             file.createNewFile();
-            doWrite(resume, file);
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
+        updateResumeInStorage(file, resume);
     }
 
-    protected abstract void doWrite(Resume resume, File file) throws IOException;
+    protected abstract void doWrite(Resume resume, OutputStream os) throws IOException;
 
     @Override
     protected void updateResumeInStorage(File file, Resume resume) {
         try {
-            doWrite(resume, file);
+            doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
@@ -54,13 +53,13 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
     @Override
     protected Resume getResumeFromStorage(File file) {
         try {
-            return doRead(file);
+            return doRead(new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             throw new StorageException("IO error", file.getName(), e);
         }
     }
 
-    protected abstract Resume doRead(File file) throws IOException;
+    protected abstract Resume doRead(InputStream is) throws IOException;
 
     @Override
     protected File getKey(String uuid) {
@@ -69,18 +68,15 @@ public abstract class AbstractFileStorage extends AbstractStorage<File> {
 
     @Override
     protected List<Resume> copyAll() {
-        List<Resume> listResume = new ArrayList<>();
-        File[] listFile = directory.listFiles();
-        if (listFile != null) {
-            for (File file : listFile) {
-                try {
-                    listResume.add(doRead(file));
-                } catch (IOException e) {
-                    throw new StorageException("IO error", file.getName(), e);
-                }
-            }
-        } else throw new IllegalArgumentException(directory.getAbsolutePath() + " is not exist");
-        return listResume;
+        File[] files = directory.listFiles();
+        if (files == null) {
+            throw new StorageException("Directory read error", null);
+        }
+        List<Resume> list = new ArrayList<>(files.length);
+        for (File file : files) {
+            list.add(getResumeFromStorage(file));
+        }
+        return list;
     }
 
     @Override
