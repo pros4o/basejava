@@ -1,13 +1,12 @@
 package com.test.webapp.model;
 
-import sun.swing.SwingUtilities2;
-
+import java.io.Serializable;
 import java.util.*;
 
 /**
  * Initial resume class
  */
-public class Resume implements Comparable<Resume> {
+public class Resume implements Comparable<Resume>, Serializable {
 
     // Unique identifier
     private final String uuid;

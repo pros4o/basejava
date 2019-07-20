@@ -5,21 +5,18 @@ import com.test.webapp.model.Resume;
 
 import java.io.*;
 
-public class ObjectStreamStorage extends AbstractFileStorage {
-    protected ObjectStreamStorage(File directory) {
-        super(directory);
-    }
+public class ObjectStreamStorage implements SaveStrategy {
 
     @Override
-    protected void doWrite(Resume r, OutputStream os) throws IOException {
-        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+    public <T1> void doWrite(Resume r, T1 os) throws IOException {
+        try (ObjectOutputStream oos = new ObjectOutputStream((OutputStream) os)) {
             oos.writeObject(r);
         }
     }
 
     @Override
-    protected Resume doRead(InputStream is) throws IOException {
-        try (ObjectInputStream ois = new ObjectInputStream(is)) {
+    public <T2> Resume doRead(T2 is) throws IOException {
+        try (ObjectInputStream ois = new ObjectInputStream((InputStream) is)) {
             return (Resume) ois.readObject();
         } catch (ClassNotFoundException e) {
             throw new StorageException("Error read resume", null, e);
