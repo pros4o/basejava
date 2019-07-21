@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class InstitutionSection extends AbstractSection {
+    private static final long serialVersionUID = 1L;
     private List<Institution> listInst;
 
     public List<Institution> getListInst() {

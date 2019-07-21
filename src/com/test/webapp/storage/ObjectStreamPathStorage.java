@@ -49,11 +49,10 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResumeFromStorage(Path path) {
         try {
-            saveStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
+            return saveStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
         } catch (IOException e) {
             throw new StorageException("Can't get resume", path.getFileName().toString(), e);
         }
-        return null;
     }
 
     @Override

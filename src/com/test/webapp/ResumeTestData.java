@@ -9,12 +9,12 @@ import java.util.List;
 
 public class ResumeTestData {
     public static void main(String[] args) {
-        Resume resume = new Resume("Григорий Кислин");
-        ResumeTestData.fillContentResume(resume);
-        System.out.println(resume);
+        Resume r = ResumeTestData.fillContentResume("22", "Григорий Кислин");
+        System.out.println(r);
     }
 
-    public static void fillContentResume(Resume resume) {
+    public static Resume fillContentResume(String uuid, String fullName) {
+        Resume resume = new Resume(uuid, fullName);
         resume.putIntoContactInfo(ContactType.TELEPHONE, "+7(921) 855-0482");
         resume.putIntoContactInfo(ContactType.SKYPE, "grigory.kislin");
         resume.putIntoContactInfo(ContactType.MAIL, "gkislin@yandex.ru");
@@ -80,7 +80,7 @@ public class ResumeTestData {
         resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
                 new Institution(
                         new Link("Java Online Projects", "http://javaops.ru/"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/10/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.now(),
                                 "Автор проекта.",
@@ -88,7 +88,7 @@ public class ResumeTestData {
                         )),
                 new Institution(
                         new Link("Wrike", "https://www.wrike.com/"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/01/2016", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "Старший разработчик (backend)",
@@ -99,7 +99,7 @@ public class ResumeTestData {
                         )),
                 new Institution(
                         new Link("RIT Center", ""),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/04/2012", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/10/2014", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "Java архитектор",
@@ -119,7 +119,7 @@ public class ResumeTestData {
         resume.putIntoSections(SectionType.EDUCATION, new InstitutionSection(
                 new Institution(
                         new Link("Coursera", "https://www.coursera.org/course/progfun"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/03/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/05/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "\"Functional Programming Principles in Scala\" by Martin Odersky",
@@ -128,7 +128,7 @@ public class ResumeTestData {
                 ),
                 new Institution(
                         new Link("Luxoft", "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/03/2011", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/04/2011", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "Курс \"Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.\"",
@@ -137,7 +137,7 @@ public class ResumeTestData {
                 ),
                 new Institution(
                         new Link("Siemens AG", "http://www.siemens.ru/"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/01/2005", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/05/2005", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "3 месяца обучения мобильным IN сетям (Берлин)",
@@ -146,7 +146,7 @@ public class ResumeTestData {
                 ),
                 new Institution(
                         new Link("Alcatel", "http://www.alcatel.ru/"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/09/1997", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/03/1998", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 " \t6 месяцев обучения цифровым телефонным сетям (Москва)",
@@ -156,13 +156,13 @@ public class ResumeTestData {
                 new Institution(
                         new Link("Санкт-Петербургский национальный исследовательский университет информационных" +
                                 " технологий, механики и оптики", "http://www.ifmo.ru/"),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/09/1993", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/07/1996", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "Аспирантура (программист С, С++)",
                                 ""
                         ),
-                        new Position(
+                        new Institution.Position(
                                 LocalDate.parse("1/09/1987", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/07/1993", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "Инженер (программист Fortran, C)",
@@ -170,5 +170,6 @@ public class ResumeTestData {
                         )
                 )
         ));
+    return resume;
     }
 }

@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class Resume implements Comparable<Resume>, Serializable {
 
-    // Unique identifier
+    private static final long serialVersionUID = 1L;
     private final String uuid;
     private final String fullName;
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
@@ -69,12 +69,14 @@ public class Resume implements Comparable<Resume>, Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Resume resume = (Resume) o;
         return Objects.equals(uuid, resume.uuid) &&
-                Objects.equals(fullName, resume.fullName);
+                Objects.equals(fullName, resume.fullName) &&
+                Objects.equals(sections, resume.sections) &&
+                Objects.equals(contactInfo, resume.contactInfo);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid, fullName);
+        return Objects.hash(uuid, fullName, sections, contactInfo);
     }
 
     @Override
