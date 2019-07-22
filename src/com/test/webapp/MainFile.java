@@ -31,29 +31,25 @@ public class MainFile {
         }
 
         File searchFilePath = new File("src/com/test/webapp");
-        int deep = 0;
-        showDirecoty(searchFilePath, deep);
+        showDirectory(searchFilePath);
     }
 
-    private static void showDirecoty(File dir, int deep) {
+    private static void showDirectory(File dir) {
         File[] innerFile = dir.listFiles();
-        for (File some : innerFile) {
-            if (some.isDirectory()) {
-                System.out.println(createMessage(deep, some));
-                showDirecoty(some, ++deep);
-                deep--;
-            } else if (some.isFile()) {
-                System.out.println(createMessage(deep, some));
+        if (innerFile != null) {
+            for (File file : innerFile) {
+                if (file.isDirectory()) {
+                    System.out.println(createMessage("\t", file));
+                    showDirectory(file);
+                } else if (file.isFile()) {
+                    System.out.println(createMessage("\t\t", file));
+                }
             }
-        }
+        } else throw new IllegalArgumentException(innerFile.toString() + " is not exist");
     }
-    private static String createMessage(int deep, File file) {
-        int i = 0;
+    private static String createMessage(String symbol, File file) {
         StringBuilder message = new StringBuilder();
-        while (i < deep) {
-            message.append("\t");
-            i++;
-        }
+        message.append(symbol);
         message.append(file.getName());
         return message.toString();
     }

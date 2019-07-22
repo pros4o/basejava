@@ -1,5 +1,6 @@
 package com.test.webapp.storage;
 
+import com.test.webapp.exception.IOStrategy;
 import com.test.webapp.exception.StorageException;
 import com.test.webapp.model.Resume;
 
@@ -11,14 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ObjectStreamPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private Path directoryPath;
     private SaveStrategy saveStrategy;
 
-    public ObjectStreamPathStorage(String storagePath, SaveStrategy saveStrategy) {
-        this.directoryPath = Paths.get(storagePath);
+    public PathStorage(String storagePath, SaveStrategy saveStrategy) {
         Objects.requireNonNull(directoryPath, "Directory must not be null");
         Objects.requireNonNull(saveStrategy, "SaveStrategy must not be null");
+        if (!directoryPath.toFile().isDirectory()) {
+            throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not directory");
+        }
+        if (!directoryPath.toFile().canRead() || !directoryPath.toFile().canWrite()) {
+            throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not readable/writable");
+        }
+        this.directoryPath = Paths.get(storagePath);
         this.saveStrategy = saveStrategy;
     }
 
@@ -32,8 +39,8 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     protected void updateResumeInStorage(Path path, Resume resume) {
         try {
             saveStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
-        } catch (IOException e) {
-            throw new StorageException("Resume can't write", resume.getUuid(), e);
+        } catch (Exception e) {
+            throw new IOStrategy("Resume can't write to the file ", path.getFileName().toString(), e);
         }
     }
 
@@ -50,8 +57,8 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     protected Resume getResumeFromStorage(Path path) {
         try {
             return saveStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
-        } catch (IOException e) {
-            throw new StorageException("Can't get resume", path.getFileName().toString(), e);
+        } catch (Exception e) {
+            throw new IOStrategy("Can't get resume", path.getFileName().toString(), e);
         }
     }
 

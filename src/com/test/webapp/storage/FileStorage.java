@@ -1,5 +1,6 @@
 package com.test.webapp.storage;
 
+import com.test.webapp.exception.IOStrategy;
 import com.test.webapp.exception.StorageException;
 import com.test.webapp.model.Resume;
 
@@ -40,8 +41,8 @@ public class FileStorage extends AbstractStorage<File> {
     protected void updateResumeInStorage(File file, Resume resume) {
         try {
             saveStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
-        } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+        } catch (Exception e) {
+            throw new IOStrategy("IO error", file.getName(), e);
         }
     }
 
@@ -54,8 +55,8 @@ public class FileStorage extends AbstractStorage<File> {
     protected Resume getResumeFromStorage(File file) {
         try {
             return saveStrategy.doRead(new BufferedInputStream(new FileInputStream(file)));
-        } catch (IOException e) {
-            throw new StorageException("IO error", file.getName(), e);
+        } catch (Exception e) {
+            throw new IOStrategy("IO error", file.getName(), e);
         }
     }
 

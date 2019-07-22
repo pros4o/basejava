@@ -1,6 +1,7 @@
 package com.test.webapp.storage;
 
 import com.test.webapp.exception.ExistStorageException;
+import com.test.webapp.exception.IOStrategy;
 import com.test.webapp.exception.NotExistStorageException;
 import com.test.webapp.model.Resume;
 
@@ -17,7 +18,7 @@ public abstract class AbstractStorage<SK> implements Storage {
 
     protected abstract void deleteResumeInStorage(SK key);
 
-    protected abstract Resume getResumeFromStorage(SK key);
+    protected abstract Resume getResumeFromStorage(SK key) throws IOStrategy;
 
     protected abstract SK getKey(String uuid);
 
@@ -57,7 +58,7 @@ public abstract class AbstractStorage<SK> implements Storage {
         return resumeList;
     }
 
-    protected abstract List<Resume> copyAll();
+    protected abstract List<Resume> copyAll() throws IOStrategy;
 
     private SK getSearchKeyIfNotExist(String uuid) {
         SK key = getKey(uuid);

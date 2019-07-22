@@ -51,6 +51,7 @@ public class Institution implements Serializable {
     }
 
     public static class Position implements Serializable {
+        private static final long serialVersionUID = 1L;
         private final LocalDate startPeriod;
         private final LocalDate endPeriod;
         private final String title;
