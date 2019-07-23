@@ -1,6 +1,5 @@
 package com.test.webapp.storage;
 
-import com.test.webapp.exception.IOStrategy;
 import com.test.webapp.exception.StorageException;
 import com.test.webapp.model.Resume;
 
@@ -14,11 +13,11 @@ import java.util.Objects;
 
 public class PathStorage extends AbstractStorage<Path> {
     private Path directoryPath;
-    private SaveStrategy saveStrategy;
+    private IOStrategy IOStrategy;
 
-    public PathStorage(String storagePath, SaveStrategy saveStrategy) {
+    public PathStorage(String storagePath, IOStrategy IOStrategy) {
         Objects.requireNonNull(directoryPath, "Directory must not be null");
-        Objects.requireNonNull(saveStrategy, "SaveStrategy must not be null");
+        Objects.requireNonNull(IOStrategy, "IOStrategy must not be null");
         if (!directoryPath.toFile().isDirectory()) {
             throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not directory");
         }
@@ -26,7 +25,7 @@ public class PathStorage extends AbstractStorage<Path> {
             throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not readable/writable");
         }
         this.directoryPath = Paths.get(storagePath);
-        this.saveStrategy = saveStrategy;
+        this.IOStrategy = IOStrategy;
     }
 
 
@@ -38,9 +37,9 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResumeInStorage(Path path, Resume resume) {
         try {
-            saveStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
-        } catch (Exception e) {
-            throw new IOStrategy("Resume can't write to the file ", path.getFileName().toString(), e);
+            IOStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
+        } catch (IOException e) {
+            throw new StorageException("Resume can't write to the file ", path.getFileName().toString(), e);
         }
     }
 
@@ -56,9 +55,9 @@ public class PathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResumeFromStorage(Path path) {
         try {
-            return saveStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
-        } catch (Exception e) {
-            throw new IOStrategy("Can't get resume", path.getFileName().toString(), e);
+            return IOStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
+        } catch (IOException e) {
+            throw new StorageException("Can't get resume", path.getFileName().toString(), e);
         }
     }
 

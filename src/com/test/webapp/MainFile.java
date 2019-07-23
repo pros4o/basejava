@@ -30,27 +30,21 @@ public class MainFile {
             throw new RuntimeException(e);
         }
 
-        File searchFilePath = new File("src/com/test/webapp");
-        showDirectory(searchFilePath);
+        File searchFilePath = new File("src/com/test");
+        showDirectory(searchFilePath, "");
     }
 
-    private static void showDirectory(File dir) {
+    private static void showDirectory(File dir, String symbol) {
         File[] innerFile = dir.listFiles();
         if (innerFile != null) {
             for (File file : innerFile) {
                 if (file.isDirectory()) {
-                    System.out.println(createMessage("\t", file));
-                    showDirectory(file);
+                    System.out.println(symbol + " folder: " + file.getName());
+                    showDirectory(file, symbol + "\t");
                 } else if (file.isFile()) {
-                    System.out.println(createMessage("\t\t", file));
+                    System.out.println(symbol + "\t file: " + file.getName());
                 }
             }
         } else throw new IllegalArgumentException(innerFile.toString() + " is not exist");
-    }
-    private static String createMessage(String symbol, File file) {
-        StringBuilder message = new StringBuilder();
-        message.append(symbol);
-        message.append(file.getName());
-        return message.toString();
     }
 }
