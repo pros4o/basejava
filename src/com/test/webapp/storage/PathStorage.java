@@ -11,14 +11,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ObjectStreamPathStorage extends AbstractStorage<Path> {
+public class PathStorage extends AbstractStorage<Path> {
     private Path directoryPath;
     private IOStrategy IOStrategy;
 
-    public ObjectStreamPathStorage(String storagePath, IOStrategy IOStrategy) {
+    public PathStorage(String storagePath, IOStrategy IOStrategy) {
+        Objects.requireNonNull(storagePath, "storagePath must not be null");
         this.directoryPath = Paths.get(storagePath);
-        Objects.requireNonNull(directoryPath, "Directory must not be null");
-        Objects.requireNonNull(IOStrategy, "IOStrategy must not be null");
+        Objects.requireNonNull(IOStrategy, "SaveStrategy must not be null");
+        if (!Files.isDirectory(directoryPath)) {
+            throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not directory");
+        }
+        if (!Files.isReadable(directoryPath) || !Files.isWritable(directoryPath)) {
+            throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not readable/writable");
+        }
         this.IOStrategy = IOStrategy;
     }
 
