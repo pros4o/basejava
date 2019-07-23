@@ -31,30 +31,18 @@ public class MainFile {
         }
 
         File searchFilePath = new File("src/com/test/webapp");
-        int deep = 0;
-        showDirecoty(searchFilePath, deep);
+        showDirectory(searchFilePath, "");
     }
 
-    private static void showDirecoty(File dir, int deep) {
-        File[] innerFile = dir.listFiles();
+    private static void showDirectory(File file, String symbol) {
+        File[] innerFile = file.listFiles();
         for (File some : innerFile) {
             if (some.isDirectory()) {
-                System.out.println(createMessage(deep, some));
-                showDirecoty(some, ++deep);
-                deep--;
+                System.out.println(symbol + " folder: " + file.getName());
+                showDirectory(file, symbol + "\t");
             } else if (some.isFile()) {
-                System.out.println(createMessage(deep, some));
+                System.out.println(symbol + "\t file: " + file.getName());
             }
         }
-    }
-    private static String createMessage(int deep, File file) {
-        int i = 0;
-        StringBuilder message = new StringBuilder();
-        while (i < deep) {
-            message.append("\t");
-            i++;
-        }
-        message.append(file.getName());
-        return message.toString();
     }
 }

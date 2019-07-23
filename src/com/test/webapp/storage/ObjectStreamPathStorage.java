@@ -13,13 +13,13 @@ import java.util.Objects;
 
 public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     private Path directoryPath;
-    private SaveStrategy saveStrategy;
+    private IOStrategy IOStrategy;
 
-    public ObjectStreamPathStorage(String storagePath, SaveStrategy saveStrategy) {
+    public ObjectStreamPathStorage(String storagePath, IOStrategy IOStrategy) {
         this.directoryPath = Paths.get(storagePath);
         Objects.requireNonNull(directoryPath, "Directory must not be null");
-        Objects.requireNonNull(saveStrategy, "SaveStrategy must not be null");
-        this.saveStrategy = saveStrategy;
+        Objects.requireNonNull(IOStrategy, "IOStrategy must not be null");
+        this.IOStrategy = IOStrategy;
     }
 
 
@@ -31,7 +31,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected void updateResumeInStorage(Path path, Resume resume) {
         try {
-            saveStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
+            IOStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
         } catch (IOException e) {
             throw new StorageException("Resume can't write", resume.getUuid(), e);
         }
@@ -49,7 +49,7 @@ public class ObjectStreamPathStorage extends AbstractStorage<Path> {
     @Override
     protected Resume getResumeFromStorage(Path path) {
         try {
-            return saveStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
+            return IOStrategy.doRead(new BufferedInputStream(new FileInputStream(path.toFile())));
         } catch (IOException e) {
             throw new StorageException("Can't get resume", path.getFileName().toString(), e);
         }
