@@ -16,15 +16,15 @@ public class PathStorage extends AbstractStorage<Path> {
     private IOStrategy IOStrategy;
 
     public PathStorage(String storagePath, IOStrategy IOStrategy) {
-        Objects.requireNonNull(directoryPath, "Directory must not be null");
-        Objects.requireNonNull(IOStrategy, "IOStrategy must not be null");
-        if (!directoryPath.toFile().isDirectory()) {
+        Objects.requireNonNull(storagePath, "storagePath must not be null");
+        this.directoryPath = Paths.get(storagePath);
+        Objects.requireNonNull(IOStrategy, "SaveStrategy must not be null");
+        if (!Files.isDirectory(directoryPath)) {
             throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not directory");
         }
-        if (!directoryPath.toFile().canRead() || !directoryPath.toFile().canWrite()) {
+        if (!Files.isReadable(directoryPath) || !Files.isWritable(directoryPath)) {
             throw new IllegalArgumentException(directoryPath.toAbsolutePath() + " is not readable/writable");
         }
-        this.directoryPath = Paths.get(storagePath);
         this.IOStrategy = IOStrategy;
     }
 
@@ -39,7 +39,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             IOStrategy.doWrite(resume, new BufferedOutputStream(new FileOutputStream(path.toFile())));
         } catch (IOException e) {
-            throw new StorageException("Resume can't write to the file ", path.getFileName().toString(), e);
+            throw new StorageException("Resume can't write", resume.getUuid(), e);
         }
     }
 

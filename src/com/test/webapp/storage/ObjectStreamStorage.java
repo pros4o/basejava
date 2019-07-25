@@ -9,8 +9,9 @@ public class ObjectStreamStorage implements IOStrategy {
 
     @Override
     public void doWrite(Resume r, OutputStream os) throws IOException {
-        ObjectOutputStream oos = new ObjectOutputStream(os);
-        oos.writeObject(r);
+        try (ObjectOutputStream oos = new ObjectOutputStream(os)) {
+            oos.writeObject(r);
+        }
     }
 
     @Override
