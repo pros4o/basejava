@@ -1,10 +1,17 @@
 package com.test.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class SimpleTextSection extends AbstractSection {
     private static final long serialVersionUID = 1L;
     private String content;
+
+    public SimpleTextSection() {
+
+    }
 
     public SimpleTextSection(String content) {
         Objects.requireNonNull(content, "content must not be null");

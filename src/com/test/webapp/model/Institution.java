@@ -1,15 +1,24 @@
 package com.test.webapp.model;
 
+import com.test.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Institution implements Serializable {
     private static final long serialVersionUID = 1L;
-    private final Link homePage;
+    private Link homePage;
     private List<Position> positions;
+
+    public Institution() {
+    }
 
     public Institution(Link homePage, Position... positions) {
         this(homePage, Arrays.asList(positions));
@@ -50,12 +59,19 @@ public class Institution implements Serializable {
         return Objects.hash(homePage, positions);
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Position implements Serializable {
         private static final long serialVersionUID = 1L;
-        private final LocalDate startPeriod;
-        private final LocalDate endPeriod;
-        private final String title;
-        private final String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate startPeriod;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
+        private LocalDate endPeriod;
+        private String title;
+        private String description;
+
+        public Position() {
+
+        }
 
         public Position(LocalDate startPeriod, LocalDate endPeriod, String title, String description) {
             this.startPeriod = startPeriod;

@@ -29,6 +29,6 @@ public class JsonSectionAdapter<T> implements JsonSerializer<T>, JsonDeserialize
         retValue.addProperty(CLASSNAME, section.getClass().getName());
         JsonElement elem = context.serialize(section);
         retValue.add(INSTANCE, elem);
-        return null;
+        return retValue;
     }
 }

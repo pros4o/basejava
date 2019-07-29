@@ -68,7 +68,7 @@ public class FileStorage extends AbstractStorage<File> {
     protected List<Resume> copyAll() {
         File[] files = directory.listFiles();
         if (files == null) {
-            throw new StorageException("Directory read error", null);
+            throw new StorageException("Directory read error");
         }
         List<Resume> list = new ArrayList<>(files.length);
         for (File file : files) {

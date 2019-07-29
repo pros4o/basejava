@@ -1,18 +1,24 @@
 package com.test.webapp.model;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.*;
 
-/**
- * Initial resume class
- */
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Resume implements Comparable<Resume>, Serializable {
 
     private static final long serialVersionUID = 1L;
-    private final String uuid;
-    private final String fullName;
+    private String uuid;
+    private String fullName;
     private Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
     private Map<ContactType, String> contactInfo = new EnumMap<>(ContactType.class);
+
+    public Resume() {
+
+    }
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -23,6 +29,14 @@ public class Resume implements Comparable<Resume>, Serializable {
         Objects.requireNonNull(fullName, "fullName must not be null");
         this.uuid = uuid;
         this.fullName = fullName;
+    }
+
+    public Map<SectionType, AbstractSection> getSections() {
+        return sections;
+    }
+
+    public Map<ContactType, String> getContactInfo() {
+        return contactInfo;
     }
 
     public AbstractSection getSections(SectionType type) {

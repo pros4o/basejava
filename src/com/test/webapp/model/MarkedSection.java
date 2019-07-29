@@ -6,6 +6,10 @@ import java.util.Objects;
 public class MarkedSection extends AbstractSection {
     private List<String> textArea;
 
+    public MarkedSection(){
+
+    }
+
     public MarkedSection(List<String> textArea) {
         Objects.requireNonNull(textArea, "textArea must not be null");
         this.textArea = textArea;

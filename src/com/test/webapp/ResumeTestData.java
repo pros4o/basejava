@@ -116,7 +116,7 @@ public class ResumeTestData {
                 )
         ));
 
-        resume.putIntoSections(SectionType.EDUCATION, new InstitutionSection(
+       resume.putIntoSections(SectionType.EDUCATION, new InstitutionSection(
                 new Institution(
                         new Link("Coursera", "https://www.coursera.org/course/progfun"),
                         new Institution.Position(
