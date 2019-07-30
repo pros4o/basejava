@@ -50,7 +50,6 @@ public class ResumeTestData {
                 " России (Cyberplat, Eport, Chronopay, Сбербанк), Белоруcсии(Erip, Osmp) и Никарагуа.");
         resume.putIntoSections(SectionType.ACHIEVEMENT, new MarkedSection(textAreaAchievement));
 
-
         List<String> textAreaQualifications = new ArrayList<>(15);
         textAreaQualifications.add("JEE AS: GlassFish (v2.1, v3), OC4J, JBoss, Tomcat, Jetty, WebLogic, WSO2 ");
         textAreaQualifications.add("Version control: Subversion, Git, Mercury, ClearCase, Perforce ");
@@ -75,7 +74,6 @@ public class ResumeTestData {
                 " архитектурных шаблонов, UML, функционального программирования ");
         textAreaQualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.putIntoSections(SectionType.QUALIFICATIONS, new MarkedSection(textAreaQualifications));
-
 
         resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
                 new Institution(

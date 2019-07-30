@@ -41,7 +41,7 @@ public class InstitutionSection extends AbstractSection {
         return Objects.hash(listInst);
     }
 
-    @Override
+   @Override
     public String toString() {
         return listInst.toString();
     }

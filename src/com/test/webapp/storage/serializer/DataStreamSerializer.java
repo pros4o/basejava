@@ -4,6 +4,7 @@ import com.test.webapp.model.*;
 import com.test.webapp.storage.IOStrategy;
 
 import java.io.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,23 +27,45 @@ public class DataStreamSerializer implements IOStrategy {
             for (Map.Entry<SectionType, AbstractSection> entryTwo : sections.entrySet()) {
                 SectionType sectionType = entryTwo.getKey();
                 dos.writeUTF(sectionType.name());
-                if (sectionType == SectionType.PERSONAL) {
-                    dos.writeUTF(String.valueOf(entryTwo.getValue()));
-                }
-                if (sectionType == SectionType.OBJECTIVE) {
-                    dos.writeUTF(String.valueOf(entryTwo.getValue()));
-                } else if (sectionType == SectionType.ACHIEVEMENT) {
-                    writeInnerSection(dos, ((MarkedSection)entryTwo.getValue()).getTextArea());
-                } else if (sectionType == SectionType.QUALIFICATIONS) {
-                    writeInnerSection(dos, ((MarkedSection)entryTwo.getValue()).getTextArea());
-                } else if (sectionType == SectionType.EXPERIENCE) {
-                    writeInnerSection(dos, ((InstitutionSection)entryTwo.getValue()).getListInst());
-                } else if (sectionType == SectionType.EDUCATION) {
-                    writeInnerSection(dos, ((InstitutionSection)entryTwo.getValue()).getListInst());
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        dos.writeUTF(String.valueOf(entryTwo.getValue()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        writeInnerSection(dos, ((MarkedSection) entryTwo.getValue()).getTextArea());
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        writeDeepSection(dos, ((InstitutionSection) entryTwo.getValue()).getListInst(), institution -> {
+                            dos.writeUTF(institution.getHomePage().getName());
+                            dos.writeUTF(institution.getHomePage().getUrl());
+                            writeDeepSection(dos, institution.getPositions(), positions -> {
+                                dos.writeUTF(positions.getStartPeriod().toString());
+                                dos.writeUTF(positions.getEndPeriod().toString());
+                                dos.writeUTF(positions.getTitle());
+                                dos.writeUTF(positions.getDescription());
+                            });
+                        });
+                        break;
                 }
             }
+        }
+    }
 
+    private interface DataWriter<T> {
+        void write(T data) throws IOException;
+    }
 
+    private interface DataRead<T> {
+        T read() throws IOException;
+    }
+
+    private <T> void writeDeepSection(DataOutputStream dos, Collection<T> collection, DataWriter<T> dataWriter) throws IOException {
+        dos.writeInt(collection.size());
+        for (T data : collection) {
+            dataWriter.write(data);
         }
     }
 
@@ -65,39 +88,38 @@ public class DataStreamSerializer implements IOStrategy {
             }
 
             size = dis.readInt();
-            for (int i = 0; i < size; i++){
+            for (int i = 0; i < size; i++) {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
-                if (sectionType == SectionType.PERSONAL) {
-                    resume.putIntoSections(sectionType, new SimpleTextSection(dis.readUTF()));
+                switch (sectionType) {
+                    case PERSONAL:
+                    case OBJECTIVE:
+                        resume.putIntoSections(sectionType, new SimpleTextSection(dis.readUTF()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        resume.putIntoSections(sectionType, new MarkedSection(readList(dis, dis::readUTF)));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        resume.putIntoSections(sectionType, new InstitutionSection( readList(dis, () -> new Institution(
+                                new Link(dis.readUTF(), dis.readUTF()),
+                                readList(dis, () -> new Institution.Position(
+                                        LocalDate.parse(dis.readUTF()),
+                                        LocalDate.parse(dis.readUTF()),
+                                        dis.readUTF(),
+                                        dis.readUTF()))))));
+                        break;
                 }
-                if (sectionType == SectionType.OBJECTIVE) {
-                    resume.putIntoSections(sectionType, new SimpleTextSection(dis.readUTF()));
-                }
-                if (sectionType == SectionType.ACHIEVEMENT) {
-                    resume.putIntoSections(sectionType, new MarkedSection(readList(dis)));
-                }
-                if (sectionType == SectionType.QUALIFICATIONS) {
-                    resume.putIntoSections(sectionType, new MarkedSection(readList(dis)));
-                }
-                if (sectionType == SectionType.EXPERIENCE) {
-                    resume.putIntoSections(sectionType, new InstitutionSection(
-                            readList(dis)
-                    ));
-                }
-                if (sectionType == SectionType.EDUCATION)
-                    resume.putIntoSections(sectionType, new InstitutionSection(
-                            readList(dis)
-                    ));
             }
             return resume;
         }
     }
 
-    private <T> List<T> readList(DataInputStream dis) throws IOException {
+    private <T> List<T> readList(DataInputStream dis, DataRead<T> dataRead) throws IOException {
         int size = dis.readInt();
         List<T> list = new ArrayList<>();
-        for(int i = 0; i < size ; i++) {
-            list.add((T) dis.readUTF());
+        for (int i = 0; i < size; i++) {
+            list.add(dataRead.read());
         }
         return list;
     }
