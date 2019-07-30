@@ -8,7 +8,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 
 public class DataStreamSerializer implements IOStrategy {
     @Override
@@ -59,13 +58,6 @@ public class DataStreamSerializer implements IOStrategy {
         void writeMap() throws IOException;
     }
 
-    private void readMap(DataInputStream dis, MapRead mapRead) throws IOException {
-        int size = dis.readInt();
-        for (int i = 0; i < size; i++) {
-            mapRead.writeMap();
-        }
-    }
-
     private interface DataWriter<T> {
         void write(T data) throws IOException;
     }
@@ -84,16 +76,12 @@ public class DataStreamSerializer implements IOStrategy {
     @Override
     public Resume doRead(InputStream is) throws IOException {
         try (DataInputStream dis = new DataInputStream(is)) {
-            String uuid = dis.readUTF();
-            String fullName = dis.readUTF();
-            Resume resume = new Resume(uuid, fullName);
-            int size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            Resume resume = new Resume(dis.readUTF(), dis.readUTF());
+            readMap(dis, () -> {
                 resume.putIntoContactInfo(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-            }
+            });
 
-            size = dis.readInt();
-            for (int i = 0; i < size; i++) {
+            readMap(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case PERSONAL:
@@ -115,8 +103,15 @@ public class DataStreamSerializer implements IOStrategy {
                                         checkFiled(dis)))))));
                         break;
                 }
-            }
+            });
             return resume;
+        }
+    }
+
+    private void readMap(DataInputStream dis, MapRead mapRead) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            mapRead.writeMap();
         }
     }
 
