@@ -116,12 +116,12 @@ public class ResumeTestData {
 
        resume.putIntoSections(SectionType.EDUCATION, new InstitutionSection(
                 new Institution(
-                        new Link("Coursera", "https://www.coursera.org/course/progfun"),
+                        new Link("Coursera", null),//"https://www.coursera.org/course/progfun"),
                         new Institution.Position(
                                 LocalDate.parse("1/03/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 LocalDate.parse("1/05/2013", DateTimeFormatter.ofPattern("d/MM/yyyy")),
                                 "\"Functional Programming Principles in Scala\" by Martin Odersky",
-                                ""
+                                null
                         )
                 ),
                 new Institution(

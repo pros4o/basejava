@@ -74,6 +74,9 @@ public class Institution implements Serializable {
         }
 
         public Position(LocalDate startPeriod, LocalDate endPeriod, String title, String description) {
+            Objects.requireNonNull(startPeriod, "startPeriod must not be null");
+            Objects.requireNonNull(endPeriod, "endPeriod must not be null");
+            Objects.requireNonNull(title, "title must not be null");
             this.startPeriod = startPeriod;
             this.endPeriod = endPeriod;
             this.title = title;

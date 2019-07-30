@@ -16,12 +16,11 @@ public class DataStreamSerializer implements IOStrategy {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(r.getUuid());
             dos.writeUTF(r.getFullName());
-            Map<ContactType, String> contacts = r.getContactInfo();
-            dos.writeInt(contacts.size());
-            for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+
+            writeDeepSection(dos, r.getContactInfo().entrySet(), entry -> {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
-            }
+            });
             Map<SectionType, AbstractSection> sections = r.getSections();
             dos.writeInt(sections.size());
             for (Map.Entry<SectionType, AbstractSection> entryTwo : sections.entrySet()) {
@@ -34,23 +33,38 @@ public class DataStreamSerializer implements IOStrategy {
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        writeInnerSection(dos, ((MarkedSection) entryTwo.getValue()).getTextArea());
+                        writeDeepSection(dos, ((MarkedSection) entryTwo.getValue()).getItems(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         writeDeepSection(dos, ((InstitutionSection) entryTwo.getValue()).getListInst(), institution -> {
                             dos.writeUTF(institution.getHomePage().getName());
-                            dos.writeUTF(institution.getHomePage().getUrl());
+                            if (institution.getHomePage().getUrl() != null) {
+                                dos.writeUTF(institution.getHomePage().getUrl());
+                            } else dos.writeUTF("null");
                             writeDeepSection(dos, institution.getPositions(), positions -> {
                                 dos.writeUTF(positions.getStartPeriod().toString());
                                 dos.writeUTF(positions.getEndPeriod().toString());
                                 dos.writeUTF(positions.getTitle());
-                                dos.writeUTF(positions.getDescription());
+                                if (positions.getDescription() != null) {
+                                    dos.writeUTF(positions.getDescription());
+                                } else dos.writeUTF("null");
                             });
                         });
                         break;
                 }
             }
+        }
+    }
+
+    private interface MapRead {
+        void writeMap() throws IOException;
+    }
+
+    private void readMap(DataInputStream dis, MapRead mapRead) throws IOException {
+        int size = dis.readInt();
+        for (int i = 0; i < size; i++) {
+            mapRead.writeMap();
         }
     }
 
@@ -66,13 +80,6 @@ public class DataStreamSerializer implements IOStrategy {
         dos.writeInt(collection.size());
         for (T data : collection) {
             dataWriter.write(data);
-        }
-    }
-
-    private <T> void writeInnerSection(DataOutputStream dos, Collection<T> collection) throws IOException {
-        dos.writeInt(collection.size());
-        for (T data : collection) {
-            dos.writeUTF(String.valueOf(data));
         }
     }
 
@@ -101,13 +108,13 @@ public class DataStreamSerializer implements IOStrategy {
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        resume.putIntoSections(sectionType, new InstitutionSection( readList(dis, () -> new Institution(
-                                new Link(dis.readUTF(), dis.readUTF()),
+                        resume.putIntoSections(sectionType, new InstitutionSection(readList(dis, () -> new Institution(
+                                new Link(dis.readUTF(), checkFiled(dis)),
                                 readList(dis, () -> new Institution.Position(
                                         LocalDate.parse(dis.readUTF()),
                                         LocalDate.parse(dis.readUTF()),
                                         dis.readUTF(),
-                                        dis.readUTF()))))));
+                                        checkFiled(dis)))))));
                         break;
                 }
             }
@@ -124,4 +131,8 @@ public class DataStreamSerializer implements IOStrategy {
         return list;
     }
 
+    private String checkFiled(DataInputStream dis) throws IOException {
+        String urlLink = dis.readUTF();
+        return urlLink.equals("null") ? null : urlLink;
+    }
 }
