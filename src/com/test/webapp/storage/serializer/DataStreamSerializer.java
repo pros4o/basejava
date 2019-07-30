@@ -21,23 +21,21 @@ public class DataStreamSerializer implements IOStrategy {
                 dos.writeUTF(entry.getKey().name());
                 dos.writeUTF(entry.getValue());
             });
-            Map<SectionType, AbstractSection> sections = r.getSections();
-            dos.writeInt(sections.size());
-            for (Map.Entry<SectionType, AbstractSection> entryTwo : sections.entrySet()) {
-                SectionType sectionType = entryTwo.getKey();
+            writeDeepSection(dos, r.getSections().entrySet(), entry -> {
+                SectionType sectionType = entry.getKey();
                 dos.writeUTF(sectionType.name());
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
-                        dos.writeUTF(String.valueOf(entryTwo.getValue()));
+                        dos.writeUTF(String.valueOf(entry.getValue()));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
-                        writeDeepSection(dos, ((MarkedSection) entryTwo.getValue()).getItems(), dos::writeUTF);
+                        writeDeepSection(dos, ((MarkedSection) entry.getValue()).getItems(), dos::writeUTF);
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
-                        writeDeepSection(dos, ((InstitutionSection) entryTwo.getValue()).getListInst(), institution -> {
+                        writeDeepSection(dos, ((InstitutionSection) entry.getValue()).getListInst(), institution -> {
                             dos.writeUTF(institution.getHomePage().getName());
                             if (institution.getHomePage().getUrl() != null) {
                                 dos.writeUTF(institution.getHomePage().getUrl());
@@ -53,7 +51,7 @@ public class DataStreamSerializer implements IOStrategy {
                         });
                         break;
                 }
-            }
+            });
         }
     }
 
