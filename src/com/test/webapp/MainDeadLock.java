@@ -37,6 +37,11 @@ public class MainDeadLock {
     private static void inc() {
         synchronized(LOCK2) {
             count++;
+            try {
+                Thread.sleep(2_000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             for (int factor = 2; factor <= count; factor++) {
                 result *= factor;
                 synchronized (LOCK1) {
@@ -49,6 +54,11 @@ public class MainDeadLock {
     private static void dev() {
         synchronized (LOCK1) {
             count--;
+            try {
+                Thread.sleep(2_000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             for (int factor = 2; factor <= count; factor++) {
                 result *= factor;
                 synchronized (LOCK2) {
