@@ -72,7 +72,7 @@ public class PathStorage extends AbstractStorage<Path> {
         try {
             Files.list(directoryPath).forEach(path -> list.add(getResumeFromStorage(path)));
         } catch (IOException e) {
-            throw new StorageException("No resumes in directory", null);
+            throw new StorageException("No resumes in directory");
         }
         return list;
     }

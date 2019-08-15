@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Objects;
 
 public class MarkedSection extends AbstractSection {
-    private List<String> textArea;
+    private List<String> items;
 
-    public MarkedSection(List<String> textArea) {
-        Objects.requireNonNull(textArea, "textArea must not be null");
-        this.textArea = textArea;
+    public MarkedSection(){
+
+    }
+
+    public MarkedSection(List<String> items) {
+        Objects.requireNonNull(items, "items must not be null");
+        this.items = items;
     }
 
     @Override
@@ -16,24 +20,24 @@ public class MarkedSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MarkedSection that = (MarkedSection) o;
-        return Objects.equals(textArea, that.textArea);
+        return Objects.equals(items, that.items);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(textArea);
+        return Objects.hash(items);
     }
 
     @Override
     public String toString() {
-        return textArea.toString();
+        return items.toString();
     }
 
-    public List<String> getTextArea() {
-        return textArea;
+    public List<String> getItems() {
+        return items;
     }
 
-    public void setTextArea(List<String> textArea) {
-        this.textArea = textArea;
+    public void setItems(List<String> items) {
+        this.items = items;
     }
 }
