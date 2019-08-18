@@ -9,8 +9,7 @@ import java.util.stream.IntStream;
 public class MainStream {
 
     private static int minValue(int[] values) {
-        IntStream stream = Arrays.stream(values);
-        return stream.distinct().sorted().reduce(0, (x, y) -> x * 10 + y);
+        return Arrays.stream(values).distinct().sorted().reduce(0, (x, y) -> x * 10 + y);
     }
 
     private static List<Integer> oddOrEven(List<Integer> integers) {

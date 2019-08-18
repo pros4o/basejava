@@ -3,9 +3,7 @@ package com.test.webapp.sql;
 import com.test.webapp.exception.ExistStorageException;
 import com.test.webapp.exception.StorageException;
 
-import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
@@ -17,22 +15,31 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public interface SqlExect <T> {
-        T execute(PreparedStatement ps) throws SQLException;
+    public <T> T tracnsactionExecute(SqlTransaction<T> executor) {
+        try (Connection conn = connectionFactory.getConnection()) {
+            try {
+                conn.setAutoCommit(false);
+                T res = executor.execute(conn);
+                conn.commit();
+                return res;
+            } catch (SQLException e) {
+                conn.rollback();
+                throw ExceptionUtil.convertException(e);
+            }
+        } catch (SQLException e) {
+            throw new StorageException(e);
+        }
     }
 
-    public <T> T executeSql(String query, SqlExect<T> sqlExect) {
-     try (Connection conn = connectionFactory.getConnection();
-            PreparedStatement ps = conn.prepareStatement(query)) {
-         return sqlExect.execute(ps);
-     } catch (SQLException e) {
-         if (e.getSQLState().startsWith("23505")) {
-             throw new ExistStorageException(e);
-         }
-         throw new StorageException(e);
-     }
+    public <T> T executeSql(String query, SqlExecutor<T> sqlExecutor) {
+        try (Connection conn = connectionFactory.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            return sqlExecutor.execute(ps);
+        } catch (SQLException e) {
+            if (e.getSQLState().startsWith("23505")) {
+                throw new ExistStorageException(e);
+            }
+            throw new StorageException(e);
+        }
     }
 }
-
-
-    //Вынести общий код (getConnection(), prepareStatement, catch SQLException) в класс SqlHelper

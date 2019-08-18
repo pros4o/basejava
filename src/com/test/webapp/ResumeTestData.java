@@ -15,14 +15,14 @@ public class ResumeTestData {
 
     public static Resume fillContentResume(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-      /*  resume.putIntoContactInfo(ContactType.TELEPHONE, "+7(921) 855-0482");
+        resume.putIntoContactInfo(ContactType.TELEPHONE, "+7(921) 855-0482");
         resume.putIntoContactInfo(ContactType.SKYPE, "grigory.kislin");
         resume.putIntoContactInfo(ContactType.MAIL, "gkislin@yandex.ru");
         resume.putIntoContactInfo(ContactType.LINKEDIN, "https://www.linkedin.com/in/gkislin");
         resume.putIntoContactInfo(ContactType.GITHUB, "https://github.com/gkislin");
         resume.putIntoContactInfo(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.putIntoContactInfo(ContactType.HOMEPAGE, "http://gkislin.ru/");
-
+/*
         resume.putIntoSections(SectionType.PERSONAL, new SimpleTextSection("Ведущий стажировок " +
                 "и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.putIntoSections(SectionType.OBJECTIVE, new SimpleTextSection("Аналитический склад ума," +
