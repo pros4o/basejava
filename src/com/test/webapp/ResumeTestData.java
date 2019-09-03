@@ -22,7 +22,7 @@ public class ResumeTestData {
         resume.putIntoContactInfo(ContactType.GITHUB, "https://github.com/gkislin");
         resume.putIntoContactInfo(ContactType.STACKOVERFLOW, "https://stackoverflow.com/users/548473");
         resume.putIntoContactInfo(ContactType.HOMEPAGE, "http://gkislin.ru/");
-/*
+
         resume.putIntoSections(SectionType.PERSONAL, new SimpleTextSection("Ведущий стажировок " +
                 "и корпоративного обучения по Java Web и Enterprise технологиям"));
         resume.putIntoSections(SectionType.OBJECTIVE, new SimpleTextSection("Аналитический склад ума," +
@@ -75,7 +75,7 @@ public class ResumeTestData {
         textAreaQualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.putIntoSections(SectionType.QUALIFICATIONS, new MarkedSection(textAreaQualifications));
 
-        resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
+       /* resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
                 new Institution(
                         new Link("Java Online Projects", "http://javaops.ru/"),
                         new Institution.Position(
