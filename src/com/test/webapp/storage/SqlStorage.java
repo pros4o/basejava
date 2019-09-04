@@ -27,7 +27,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void update(Resume resume) {
-        sqlHelper.tracnsactionExecute(conn -> {
+        sqlHelper.transactionExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("UPDATE resume SET full_name = ? WHERE uuid = ?")) {
                 ps.setString(1, resume.getFullName());
                 ps.setString(2, resume.getUuid());
@@ -37,14 +37,19 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 ps.execute();
             }
+            try (PreparedStatement ps = conn.prepareStatement("DELETE FROM section WHERE resume_uuid = ?")) {
+                ps.setString(1, resume.getUuid());
+                ps.execute();
+            }
             fillContact(resume, conn);
+            fillSection(resume, conn);
             return null;
         });
     }
 
     @Override
     public void save(Resume resume) {
-        sqlHelper.tracnsactionExecute(conn -> {
+        sqlHelper.transactionExecute(conn -> {
             try (PreparedStatement ps = conn.prepareStatement("INSERT INTO resume (uuid, full_name) VALUES (?,?)")) {
                 ps.setString(1, resume.getUuid());
                 ps.setString(2, resume.getFullName());
@@ -58,15 +63,13 @@ public class SqlStorage implements Storage {
 
     @Override
     public Resume get(String uuid) {
-        return sqlHelper.tracnsactionExecute(
-                conn -> {
+        return sqlHelper.transactionExecute(conn -> {
                     Resume r;
                     try (PreparedStatement ps = conn.prepareStatement("" +
                             "SELECT * FROM resume r " +
                             "LEFT JOIN contact c " +
                             "ON r.uuid = c.resume_uuid " +
-                            "WHERE r.uuid = ?"
-                    )) {
+                            "WHERE r.uuid = ?")) {
                         ps.setString(1, uuid);
                         ResultSet rs = ps.executeQuery();
                         if (!rs.next()) {
@@ -77,7 +80,6 @@ public class SqlStorage implements Storage {
                             addContact(r, rs);
                         } while (rs.next());
                     }
-
                     try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section s WHERE s.resume_uuid = ?")) {
                         ps.setString(1, uuid);
                         ResultSet rs = ps.executeQuery();
@@ -85,7 +87,6 @@ public class SqlStorage implements Storage {
                             addSection(r, rs);
                         }
                     }
-
                     return r;
                 }
         );
@@ -103,7 +104,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public List<Resume> getAllSorted() {
-        return sqlHelper.tracnsactionExecute(conn -> {
+        return sqlHelper.transactionExecute(conn -> {
                     Map<String, Resume> result = new LinkedHashMap<>();
                     try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume ORDER BY full_name, uuid")) {
                         ResultSet rs = ps.executeQuery();
@@ -113,7 +114,6 @@ public class SqlStorage implements Storage {
                             result.computeIfAbsent(uuid, id -> new Resume(id, full_name));
                         }
                     }
-
                     try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact")) {
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
@@ -121,10 +121,7 @@ public class SqlStorage implements Storage {
                             addContact(resume, rs);
                         }
                     }
-
-                    try (PreparedStatement ps = conn.prepareStatement(
-                            "SELECT * FROM section"
-                    )) {
+                    try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section")) {
                         ResultSet rs = ps.executeQuery();
                         while (rs.next()) {
                             Resume r = result.get(rs.getString("resume_uuid").trim());
@@ -198,7 +195,6 @@ public class SqlStorage implements Storage {
                 ps.setString(1, resume.getUuid());
                 SectionType sectionType = e.getKey();
                 ps.setString(2, sectionType.name());
-
                 switch (sectionType) {
                     case PERSONAL:
                     case OBJECTIVE:
@@ -207,7 +203,7 @@ public class SqlStorage implements Storage {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         ps.setString(3,
-                                String.join("\n",((MarkedSection) e.getValue()).getItems()));
+                                String.join("\n", ((MarkedSection) e.getValue()).getItems()));
                     case EXPERIENCE:
                     case EDUCATION:
                         break;

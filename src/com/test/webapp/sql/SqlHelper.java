@@ -15,7 +15,7 @@ public class SqlHelper {
         this.connectionFactory = connectionFactory;
     }
 
-    public <T> T tracnsactionExecute(SqlTransaction<T> executor) {
+    public <T> T transactionExecute(SqlTransaction<T> executor) {
         try (Connection conn = connectionFactory.getConnection()) {
             try {
                 conn.setAutoCommit(false);
