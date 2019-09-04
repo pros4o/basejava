@@ -38,21 +38,20 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
 
         String uuid = request.getParameter("uuid");
 
-       if (uuid != null) {
-           Resume resume = storage.get(uuid);
-           pw.write("<p>Your resume filed:</p> Uuid: " + resume.getUuid() + " Full Name: " + uuid);
+        if (uuid != null) {
+            Resume resume = storage.get(uuid);
+            pw.write("<p>Your resume filed:</p> Uuid: " + resume.getUuid() + " Full Name: " + resume.getFullName());
         } else {
 
-           List<Resume> resumeList = storage.getAllSorted();
-           pw.write("<table>");
-           for (Resume resume : resumeList) {
-               pw.write("<tr>");
-               pw.write("<th>" + resume.getUuid() + "</th>");
-               pw.write("<th>" + resume.getFullName() + "</th>");
-               pw.write("</tr>");
-           }
-
-       }
+            List<Resume> resumeList = storage.getAllSorted();
+            pw.write("<table>");
+            for (Resume resume : resumeList) {
+                pw.write("<tr>");
+                pw.write("<th>" + resume.getUuid() + "</th>");
+                pw.write("<th>" + resume.getFullName() + "</th>");
+                pw.write("</tr>");
+            }
+        }
         pw.write("</body>");
         pw.write("</html>");
     }

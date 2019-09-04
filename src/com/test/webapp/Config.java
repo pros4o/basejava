@@ -29,7 +29,7 @@ public class Config {
             storage = new SqlStorage(properties.getProperty("db.url"),
                     properties.getProperty("db.user"),
                     properties.getProperty("db.password"));
-        } catch (IOException | SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+        } catch (IOException | SQLException e) {
             throw new IllegalStateException("Invalid config file " + PROPS.getAbsolutePath());
         }
     }
