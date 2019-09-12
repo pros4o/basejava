@@ -1,58 +1,70 @@
 package com.test.webapp.web;
 
 import com.test.webapp.Config;
+import com.test.webapp.model.ContactType;
 import com.test.webapp.model.Resume;
 import com.test.webapp.storage.Storage;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
 
 
 public class ResumeServlet extends javax.servlet.http.HttpServlet {
 
-    private Storage storage = Config.get().getStorage();
+    private Storage storage;
+
+    @Override
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+        storage = Config.get().getStorage();
+    }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+        request.setCharacterEncoding("UTF-8");
+        String uuid = request.getParameter("uuid");
+        String fullName = request.getParameter("fullName");
+        Resume resume = storage.get(uuid);
+        resume.setFullName(fullName);
+        for (ContactType type : ContactType.values()) {
+            String value = request.getParameter(type.name());
+            if (value != null && value.trim().length() != 0) {
+                resume.putIntoContactInfo(type, value);
+            } else {
+                resume.getContactInfo().remove(type);
+            }
+        }
+        storage.update(resume);
+        response.sendRedirect("resume");
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("text/html; charset=UTF-8");
-
-
-        PrintWriter pw = response.getWriter();
-
-        pw.write("<!DOCTYPE html>");
-        pw.write("<html>");
-        pw.write("<head>");
-        pw.write("<link rel=\"stylesheet\" href=\"css/style.css\">");
-        pw.write("<title>Show Resume</title>");
-        pw.write("</head>");
-        pw.write("<body>");
-
         String uuid = request.getParameter("uuid");
-
-        if (uuid != null) {
-            Resume resume = storage.get(uuid);
-            pw.write("<p>Your resume filed:</p> Uuid: " + resume.getUuid() + " Full Name: " + resume.getFullName());
-        } else {
-
-            List<Resume> resumeList = storage.getAllSorted();
-            pw.write("<table>");
-            for (Resume resume : resumeList) {
-                pw.write("<tr>");
-                pw.write("<th>" + resume.getUuid() + "</th>");
-                pw.write("<th>" + resume.getFullName() + "</th>");
-                pw.write("</tr>");
-            }
+        String action = request.getParameter("action");
+        if (action == null) {
+            request.setAttribute("resumes", storage.getAllSorted());
+            request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
+            return;
         }
-        pw.write("</body>");
-        pw.write("</html>");
+        Resume resume;
+        switch (action) {
+            case "delete":
+                storage.delete(uuid);
+                response.sendRedirect("resume");
+                return;
+            case "view":
+            case "edit":
+                resume = storage.get(uuid);
+                break;
+            default:
+                throw new IllegalArgumentException("Action " + action + " is illegal");
+        }
+        request.setAttribute("resume", resume);
+        request.getRequestDispatcher(
+                ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
+        ).forward(request, response);
     }
 }
