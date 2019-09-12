@@ -60,32 +60,33 @@ public class SqlStorage implements Storage {
     @Override
     public Resume get(String uuid) {
         return sqlHelper.transactionExecute(conn -> {
-                    Resume r;
-                    try (PreparedStatement ps = conn.prepareStatement("" +
-                            "SELECT * FROM resume r " +
-                            "LEFT JOIN contact c " +
-                            "ON r.uuid = c.resume_uuid " +
-                            "WHERE r.uuid = ?")) {
-                        ps.setString(1, uuid);
-                        ResultSet rs = ps.executeQuery();
-                        if (!rs.next()) {
-                            throw new NotExistStorageException(uuid);
-                        }
-                        r = new Resume(uuid, rs.getString("full_name"));
-                        do {
-                            addContact(r, rs);
-                        } while (rs.next());
-                    }
-                    try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section s WHERE s.resume_uuid = ?")) {
-                        ps.setString(1, uuid);
-                        ResultSet rs = ps.executeQuery();
-                        while (rs.next()) {
-                            addSection(r, rs);
-                        }
-                    }
-                    return r;
+            Resume r;
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM resume WHERE uuid =?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                if (!rs.next()) {
+                    throw new NotExistStorageException(uuid);
                 }
-        );
+                r = new Resume(uuid, rs.getString("full_name"));
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid =?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addContact(r, rs);
+                }
+            }
+
+            try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid =?")) {
+                ps.setString(1, uuid);
+                ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    addSection(r, rs);
+                }
+            }
+            return r;
+        });
     }
 
 
