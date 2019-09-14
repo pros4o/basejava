@@ -3,6 +3,7 @@ package com.test.webapp.web;
 import com.test.webapp.Config;
 import com.test.webapp.model.ContactType;
 import com.test.webapp.model.Resume;
+import com.test.webapp.model.SectionType;
 import com.test.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -26,8 +27,13 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
-        Resume resume = storage.get(uuid);
-        resume.setFullName(fullName);
+        Resume resume;
+        if (uuid == null) {
+            resume = new Resume(fullName);
+        } else {
+            resume = storage.get(uuid);
+            resume.setFullName(fullName);
+        }
         for (ContactType type : ContactType.values()) {
             String value = request.getParameter(type.name());
             if (value != null && value.trim().length() != 0) {
@@ -49,6 +55,7 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
+        String fullName = request.getParameter("fullName");
         Resume resume;
         switch (action) {
             case "delete":
@@ -59,6 +66,13 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
             case "edit":
                 resume = storage.get(uuid);
                 break;
+            case "save":
+                if (fullName != null) {
+                    resume = new Resume(fullName);
+                    storage.save(resume);
+                    response.sendRedirect("resume");
+                    return;
+                }
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }

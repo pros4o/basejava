@@ -75,7 +75,7 @@ public class ResumeTestData {
         textAreaQualifications.add("Родной русский, английский \"upper intermediate\"");
         resume.putIntoSections(SectionType.QUALIFICATIONS, new MarkedSection(textAreaQualifications));
 
-       /* resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
+        resume.putIntoSections(SectionType.EXPERIENCE, new InstitutionSection(
                 new Institution(
                         new Link("Java Online Projects", "http://javaops.ru/"),
                         new Institution.Position(
@@ -167,7 +167,7 @@ public class ResumeTestData {
                                 ""
                         )
                 )
-        ));*/
+        ));
     return resume;
     }
 }
