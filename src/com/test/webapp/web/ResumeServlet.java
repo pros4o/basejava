@@ -1,9 +1,7 @@
 package com.test.webapp.web;
 
 import com.test.webapp.Config;
-import com.test.webapp.model.ContactType;
-import com.test.webapp.model.Resume;
-import com.test.webapp.model.SectionType;
+import com.test.webapp.model.*;
 import com.test.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -11,6 +9,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 
 public class ResumeServlet extends javax.servlet.http.HttpServlet {
@@ -28,7 +30,10 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
         String uuid = request.getParameter("uuid");
         String fullName = request.getParameter("fullName");
         Resume resume;
-        if (uuid == null) {
+        if (uuid == "") {
+            resume = new Resume(UUID.randomUUID().toString(), "");
+            resume.setFullName(fullName);
+        } else if (uuid == null) {
             resume = new Resume(fullName);
         } else {
             resume = storage.get(uuid);
@@ -42,7 +47,30 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
                 resume.getContactInfo().remove(type);
             }
         }
-        storage.update(resume);
+        for (SectionType sectionType : SectionType.values()) {
+            String value = request.getParameter(sectionType.name());
+            String[] values = request.getParameterValues(sectionType.name());
+            if (value == null || value.trim().length() == 0 && values.length < 2) {
+                resume.getSections().remove(sectionType);
+            } else {
+                switch (sectionType.name()) {
+                    case "PERSONAL":
+                    case "OBJECTIVE":
+                        resume.putIntoSections(sectionType, new SimpleTextSection(request.getParameter(sectionType.name())));
+                        break;
+                    case "ACHIEVEMENT":
+                    case "QUALIFICATIONS":
+                        resume.putIntoSections(sectionType, new MarkedSection(Arrays.asList(value.split("\n"))));
+                }
+            }
+        }
+
+
+        if ("".equals(uuid)) {
+            storage.save(resume);
+        } else {
+            storage.update(resume);
+        }
         response.sendRedirect("resume");
     }
 
@@ -64,15 +92,12 @@ public class ResumeServlet extends javax.servlet.http.HttpServlet {
                 return;
             case "view":
             case "edit":
-                resume = storage.get(uuid);
-                break;
-            case "save":
-                if (fullName != null) {
-                    resume = new Resume(fullName);
-                    storage.save(resume);
-                    response.sendRedirect("resume");
-                    return;
+                if (uuid.equals("")) {
+                    resume = new Resume("", "");
+                } else {
+                    resume = storage.get(uuid);
                 }
+                break;
             default:
                 throw new IllegalArgumentException("Action " + action + " is illegal");
         }
